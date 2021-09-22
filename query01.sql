@@ -19,7 +19,7 @@ with septa_bus_stop_block_groups as (
         on ST_DWithin(
             ST_Transform(s.the_geom, 2272),
             ST_Transform(bg.the_geom, 2272),
-            800 * 3.28084
+            800 * 3.28084  -- A meter is about 3.28 ft
         )
 ),
 
