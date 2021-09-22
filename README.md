@@ -1,5 +1,7 @@
 # Assignment 02: PostGIS Analytics
 
+**Due: Oct 11, 2021 by 11:59pm ET**
+
 For each of the questions below, your query should produce results in the format specified. Write your query in a SQL file corresponding to the question number (e.g. a file named _query06.sql_ for the answer to question #6). Each SQL file should contain a single query.
 
 Your datasets should be named:
@@ -10,7 +12,7 @@ Your datasets should be named:
 * census_block_groups ([OpenDataPhilly](https://opendataphilly.org/dataset/census-block-groups))
 * census_population ([Census Explorer](https://data.census.gov/cedsci/table?t=Populations%20and%20People&g=0500000US42101%241500000&y=2010&d=DEC%20Summary%20File%201&tid=DECENNIALSF12010.P1))
 
-## Queries
+## Questions
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
@@ -85,11 +87,17 @@ Your datasets should be named:
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
+  **Structure:**
   ```sql
   (
       stop_id integer,
       stop_name text,
+      stop_desc text,
       stop_lon double precision,
-      stop_lat double precision,
-      stop_desc text
+      stop_lat double precision
   )
+  ```
+
+  As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+
+  **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
