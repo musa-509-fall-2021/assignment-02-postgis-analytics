@@ -2,15 +2,21 @@
 
 **Due: Oct 11, 2021 by 11:59pm ET**
 
-For each of the questions below, your query should produce results in the format specified. Write your query in a SQL file corresponding to the question number (e.g. a file named _query06.sql_ for the answer to question #6). Each SQL file should contain a single query.
+## Submission Instructions
 
-Your datasets should be named:
-* septa_bus_stops ([SEPTA GTFS](http://www3.septa.org/developer/))
-* septa_bus_shapes ([SEPTA GTFS](http://www3.septa.org/developer/))
-* septa_rail_stops ([SEPTA GTFS](http://www3.septa.org/developer/))
-* phl_pwd_parcels ([OpenDataPhilly](https://opendataphilly.org/dataset/pwd-stormwater-billing-parcels))
-* census_block_groups ([OpenDataPhilly](https://opendataphilly.org/dataset/census-block-groups))
-* census_population ([Census Explorer](https://data.census.gov/cedsci/table?t=Populations%20and%20People&g=0500000US42101%241500000&y=2010&d=DEC%20Summary%20File%201&tid=DECENNIALSF12010.P1))
+1. Fork this repository to your GitHub account.
+
+2. Write a query to answer each of the questions below. Your queries should produce results in the format specified. Write your query in a SQL file corresponding to the question number (e.g. a file named _query06.sql_ for the answer to question #6). Each SQL file should contain a single `SELECT` query (though it may include other queries before the select if you need to do things like create indexes or update columns).
+
+  Your datasets should be named:
+  * septa_bus_stops ([SEPTA GTFS](http://www3.septa.org/developer/))
+  * septa_bus_shapes ([SEPTA GTFS](http://www3.septa.org/developer/))
+  * septa_rail_stops ([SEPTA GTFS](http://www3.septa.org/developer/))
+  * phl_pwd_parcels ([OpenDataPhilly](https://opendataphilly.org/dataset/pwd-stormwater-billing-parcels))
+  * census_block_groups ([OpenDataPhilly](https://opendataphilly.org/dataset/census-block-groups))
+  * census_population ([Census Explorer](https://data.census.gov/cedsci/table?t=Populations%20and%20People&g=0500000US42101%241500000&y=2010&d=DEC%20Summary%20File%201&tid=DECENNIALSF12010.P1))
+
+3. Submit a pull request with your answers. You can continue to push changes to your repository up until the due date, and those changes will be visible in your pull request.
 
 ## Questions
 
