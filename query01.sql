@@ -5,9 +5,9 @@
 */
 
 
-create index septa_bus_stops__the_geom__2272__idx
+create index septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
-    using GiST (ST_Transform(the_geom, 2272));
+    using GiST (ST_Transform(the_geom, 32129));
 
 
 with septa_bus_stop_block_groups as (
@@ -17,9 +17,9 @@ with septa_bus_stop_block_groups as (
     from septa_bus_stops as s
     join census_block_groups as bg
         on ST_DWithin(
-            ST_Transform(s.the_geom, 2272),
-            ST_Transform(bg.the_geom, 2272),
-            800 * 3.28084  -- A meter is about 3.28 ft
+            ST_Transform(s.the_geom, 32129),
+            ST_Transform(bg.the_geom, 32129),
+            800
         )
 ),
 
