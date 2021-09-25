@@ -24,6 +24,8 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+A: "Passyunk Av & 15th St" has the largest population of 50867.
+
 2. Which bus stop has the smallest population within 800 meters?
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
@@ -35,6 +37,8 @@
       the_geom geometry(Point, 4326) -- The geometry of the bus stop
   )
   ```
+
+  A: "Charter Rd & Norcom Rd" has the smallest population of 2.
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
