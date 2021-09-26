@@ -50,6 +50,16 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
       distance_m double precision  -- The distance apart in meters
   )
   ```
+| address          | stop_name                      | distance_m         |
+| ---------------- | ------------------------------ | ------------------ |
+| 170 SPRING LN    | Ridge Av & Ivins Rd            | 1658.7873935685589 |
+| 150 SPRING LN    | Ridge Av & Ivins Rd            | 1620.287986054119  |
+| 130 SPRING LN    | Ridge Av & Ivins Rd            | 1610.9941677070408 |
+| 190 SPRING LN    | Ridge Av & Ivins Rd            | 1490.0758681774478 |
+| 630 ST ANDREW RD | Germantown Av & Springfield Av | 1418.391081837042  |
+| ...              | ...                            | ...                |
+
+
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
@@ -60,12 +70,40 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
       trip_length double precision  -- Length of the trip in meters
   )
   ```
+  
+| trip_headsign | trip_length        |
+| ------------- | ------------------ |
+| 266311        | 15445.022598532600 |
+| 266312        | 10044.302723522300 |
+| 266313        | 15445.022598532600 |
+| 266314        | 11149.195550009400 |
+| 266315        | 10982.949704948900 |
+
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
   **Description:**
 
+  $$Score = \frac{N}{ S }$$
+
+  > $N$: Number of stops with wheelchairs boarding *
+  >
+  > $S$: Area of the neighborhood($m^2$)
+  >
+  > \* Not known is considered as false.
+
+
 6. What are the _top five_ neighborhoods according to your accessibility metric?
+
+| **neighborhood_name**      | **accessibility_metric** | **num_bus_stops_accessible** | **num_bus_stops_inaccessible** |
+| -------------------------- | ------------------------ | ---------------------------- | ------------------------------ |
+| **Washington Square West** | 0.00008472025565149550   | 72                           | 2                              |
+| **Newbold**                | 0.00008254186446362420   | 45                           | 4                              |
+| **Spring Garden**          | 0.00007627525758323820   | 48                           | 2                              |
+| **Hawthorne**              | 0.00007601551498445400   | 30                           | 0                              |
+| **Francisville**           | 0.00007487622621403220   | 41                           | 0                              |
+
+
 
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
@@ -79,6 +117,18 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
   )
   ```
 
+- 
+
+| **neighborhood_name** | **accessibility_metric** | **num_bus_stops_accessible** | **num_bus_stops_inaccessible** |
+| --------------------- | ------------------------ | ---------------------------- | ------------------------------ |
+| **Bartram Village**   | 0                        | 0                            | 14                             |
+| **Port Richmond**     | 0.000001263189033554710  | 2                            | 0                              |
+| **West Torresdale**   | 0.0000018492499673526600 | 1                            | 0                              |
+| **Navy Yard**         | 0.0000018794112591801200 | 14                           | 0                              |
+| **Airport**           | 0.0000021422035439600800 | 20                           | 0                              |
+
+  
+
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
   **Structure (should be a single value):**
@@ -87,6 +137,12 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
       count_block_groups integer
   )
   ```
+
+
+
+
+
+  
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
