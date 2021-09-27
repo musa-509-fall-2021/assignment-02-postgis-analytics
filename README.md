@@ -137,12 +137,8 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
       count_block_groups integer
   )
   ```
+  I choose ["Philadelphia Universities and Colleges"](https://www.opendataphilly.org/dataset/philadelphia-universities-and-colleges/resource/1e37f5f0-6212-4cb4-9d87-261b58ae01c4) dataset, adding a buffer of 80m and union the polygons. The result census block groups fully contained is 3.
 
-
-
-
-
-  
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
@@ -152,6 +148,11 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
       geo_id text
   )
   ```
+
+  |**geo_id**|
+  |---|
+  |421010369001|
+
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
