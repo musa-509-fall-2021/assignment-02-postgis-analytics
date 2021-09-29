@@ -4,11 +4,12 @@
   of the 800 meter buffer.
 */
 
+UPDATE septa_bus_stops
+SET the_geom=st_setsrid(st_makepoint(stop_lon,stop_lat),4326)
 
 create index septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
-    using GiST (ST_Transform(ST_SetSRID(ST_Makepoint(stop_lon,stop_lat),4326), 32129));
-
+    using GiST (st_transform(the_geom, 32129));
 
 with septa_bus_stop_block_groups as (
     select
@@ -17,7 +18,7 @@ with septa_bus_stop_block_groups as (
     from septa_bus_stops as s
     join census_block_groups as bg
         on ST_DWithin(
-            ST_Transform(ST_SetSRID(ST_Makepoint(s.stop_lon,s.stop_lat),4326), 32129),
+            ST_Transform(s.the_geom, 32129),
             ST_Transform(bg.the_geom, 32129),
             800
         )
@@ -35,7 +36,7 @@ septa_bus_stop_surrounding_population as (
 select
     s.stop_name,
     b.estimated_pop_800m,
-    ST_Setsrid(ST_makepoint(s.stop_lon,s.stop_lat),4326) as the_geom
+    s.the_geom
 from septa_bus_stop_surrounding_population as b
 join septa_bus_stops as s 
 on s.stop_id = b.stop_id
