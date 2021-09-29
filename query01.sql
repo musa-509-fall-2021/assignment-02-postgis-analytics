@@ -41,3 +41,9 @@ join septa_bus_stops as s
 on s.stop_id = b.stop_id
 order by estimated_pop_800m desc
 limit 1
+
+
+/*
+result:
+Passyunk Av & 15th St   50867   {"type":"Point","coordinates":[-75.171384,39.925116]}
+*/
