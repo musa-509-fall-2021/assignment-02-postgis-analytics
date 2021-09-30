@@ -168,5 +168,14 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
   ```
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+  
+  
+  
+  I decided to find and list parks around the bus stops as a guide to people who want to go to park by bus. The point data of Philly is from [HERE](https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=7021). Below is the final result of `stop_desc`.
+  
+  > There are 6 park(s) within 1.5km of this stop, at the 33th percentile among the park number of all stops. And here are 3 of them which is/are the closest. :) 
+  > 1. Nicetown Park at 4369-71 GERMANTOWN AVE which is 847m N (10 mins walk) of the stop.
+  > 2. Fernhill Park at 4600 MORRIS ST which is 1128m W (14 mins walk) of the stop.
+  > 3. Hunting Park at 1101 W HUNTING PARK AVE which is 1237m NE (15 mins walk) of the stop.
 
   **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.

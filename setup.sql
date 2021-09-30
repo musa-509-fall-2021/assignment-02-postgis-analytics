@@ -66,3 +66,13 @@ set the_geom = st_transform(geometry,32129);
 
 select st_astext(the_geom) from university_phl
 limit 10;
+
+-- parks
+ALTER TABLE park_phl
+ADD COLUMN the_geom geometry;
+
+update park_phl
+set the_geom = st_transform(geometry,32129);
+
+select st_astext(the_geom) from park_phl
+limit 10;
