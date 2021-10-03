@@ -1,42 +1,44 @@
 /*
-  Which bus stop has the largest population within 800 meters? As a rough
-  estimation, consider any block group that intersects the buffer as being part
-  of the 800 meter buffer.
+  Which bus stop has the smallest population within 800 meters?
+
+  **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
+
+  ```sql
+  (
+      stop_name text, -- The name of the station
+      estimated_pop_800m integer, -- The population within 800 meters
+      the_geom geometry(Point, 4326) -- The geometry of the bus stop
+  )
+  ```
 */
+-- connect the population with groups
 
 
-create index septa_bus_stops__the_geom__32129__idx
-    on septa_bus_stops
-    using GiST (ST_Transform(the_geom, 32129));
-
-
-with septa_bus_stop_block_groups as (
-    select
-        s.stop_id,
-        '1500000US' || bg.geoid10 as geo_id
-    from septa_bus_stops as s
-    join census_block_groups as bg
-        on ST_DWithin(
-            ST_Transform(s.the_geom, 32129),
-            ST_Transform(bg.the_geom, 32129),
-            800
-        )
+with POP_DATA as (
+  select c.geoid10 as geo_id,
+c.namelsad10 as block_groups,
+d.total as population,
+st_setsrid(st_makepoint(c.intptlon10,c.intptlat10),4326)::geometry as the_geom
+from census_block_groups_2010 as c
+join
+decennialsf12010_p1_data_with_overlays_2021_09_09t131935 as d
+on cast(c.geoid10 as text) = substring(d.id,10)
 ),
 
-septa_bus_stop_surrounding_population as (
-    select
-        stop_id,
-        sum(population) as estimated_pop_800m
-    from septa_bus_stop_block_groups as s
-    join census_population as p using (geo_id)
-    group by stop_id
+stops as (
+  select st_setsrid(st_makepoint(stop_lon,stop_lat),4326)::geometry as the_geom,
+  stop_name,
+  stop_id
+  from stops_cvs
 )
 
-select
-    stop_name,
-    estimated_pop_800m,
-    the_geom
-from septa_bus_stop_surrounding_population
-join septa_bus_stops using (stop_id)
+select s.stop_name, s.stop_id,
+ sum(p.population)as estimated_pop_800m,
+ s.the_geom
+from POP_DATA as p
+join
+stops as s
+on st_dwithin(ST_Transform(s.the_geom,2272),ST_Transform(p.the_geom,2272),800)
+group by s.stop_name, s.stop_id,s.the_geom
 order by estimated_pop_800m desc
 limit 1
