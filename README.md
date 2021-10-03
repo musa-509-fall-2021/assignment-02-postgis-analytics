@@ -23,6 +23,7 @@
 ## Questions
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
+
 |stop_name|Population|the_geom|
 |:---:|:---:|:---:|
 |"Passyunk Av & 15th St"|50867|"0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340"|
