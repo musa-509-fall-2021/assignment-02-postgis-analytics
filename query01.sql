@@ -9,7 +9,6 @@ create index septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
     using GiST (ST_Transform(the_geom, 32129));
 
-
 with septa_bus_stop_block_groups as (
     select
         s.stop_id,
@@ -28,7 +27,7 @@ septa_bus_stop_surrounding_population as (
         stop_id,
         sum(population) as estimated_pop_800m
     from septa_bus_stop_block_groups as s
-    join census_population as p using (geo_id)
+    join census_population as p using (substring(id,-10))
     group by stop_id
 )
 
