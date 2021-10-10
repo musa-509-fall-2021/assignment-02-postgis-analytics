@@ -24,6 +24,8 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+
+
 2. Which bus stop has the smallest population within 800 meters?
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
@@ -56,6 +58,9 @@
       trip_length double precision  -- Length of the trip in meters
   )
   ```
+
+Bucks County Community College (46,504m; 28miles)
+Oxford Valley Mall (43,658m)
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 

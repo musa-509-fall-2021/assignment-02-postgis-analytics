@@ -5,37 +5,37 @@
 */
 
 
-create index septa_bus_stops__the_geom__32129__idx
-    on septa_bus_stops
-    using GiST (ST_Transform(the_geom, 32129));
-
-with septa_bus_stop_block_groups as (
-    select
+/*    select
         s.stop_id,
-        '1500000US' || bg.geoid10 as geo_id
+        bg.geoid10 as geoid
     from septa_bus_stops as s
     join census_block_groups as bg
         on ST_DWithin(
-            ST_Transform(s.the_geom, 32129),
-            ST_Transform(bg.the_geom, 32129),
+            ST_SetSRID(ST_Point(s.stop_lat, s.stop_lon),32129),
+            ST_Transform(bg.geometry, 32129),
             800
         )
+*/		
+with bus_stop_geom as (		
+select stop_id, stop_name, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) AS geometry
+	FROM septa_bus_stops
 ),
-
-septa_bus_stop_surrounding_population as (
-    select
-        stop_id,
-        sum(population) as estimated_pop_800m
-    from septa_bus_stop_block_groups as s
-    join census_population as p using (substring(id,-10))
-    group by stop_id
+bus_stop_block_group as (
+	select b.stop_id, b.stop_name, bg.geoid10 as geoid
+	from bus_stop_geom as b
+	join census_block_groups as bg
+	ON ST_Intersects(
+		ST_Buffer(ST_Transform(b.geometry, 32129),800),
+		ST_Transform(bg.geometry,32129)
+	)
+),
+census_population_adj as (
+	select SUBSTRING(p.id, 10) AS geoid, total
+	from census_population as p
 )
-
-select
-    stop_name,
-    estimated_pop_800m,
-    the_geom
-from septa_bus_stop_surrounding_population
-join septa_bus_stops using (stop_id)
-order by estimated_pop_800m desc
-limit 1
+SELECT b.stop_id, SUM(cp.total) as estimated_pop_800m
+FROM bus_stop_block_group as b
+JOIN census_population_adj as cp using(geoid)
+GROUP BY b.stop_id
+ORDER BY estimated_pop_800m desc
+LIMIT 1

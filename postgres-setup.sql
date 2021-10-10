@@ -89,3 +89,17 @@ with (format csv, header true);
 copy septa_rail_stops
 from '/Users/Shared/Assignment2-data/septa_rail_stops.csv'
 with (format csv, header true);
+
+create table septa_bus_trips (
+	route_id text,
+	service_id integer,
+	trip_id integer,
+	trip_headsign text,
+	block_id integer,
+	direction_id integer,
+	shape_id integer
+);
+
+copy septa_bus_trips
+from '/Users/Shared/Assignment2-data/septa_bus_trips.csv'
+with (format csv, header true);
