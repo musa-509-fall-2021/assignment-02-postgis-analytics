@@ -21,7 +21,7 @@ WITH copy_shapes AS (
 
 select 
 	shape_id as trip_headsign,
-	sum(st_distance(st_transform(geo_1,32129),st_transform(geo_2,32129))) as sum_distance
+	sum(st_distance(st_transform(geo_1,32129),st_transform(geo_2,32129))) as trip_length
 from joined
 group by 1
 order by 2 DESC
@@ -30,7 +30,7 @@ limit 2
 
 
 /*
-trip_headsign sum_distance
+trip_headsign trip_length
 266630        46452.89305160814
 266697        45328.09812355311
 */
