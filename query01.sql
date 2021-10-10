@@ -33,9 +33,9 @@ census_population_adj as (
 	select SUBSTRING(p.id, 10) AS geoid, total
 	from census_population as p
 )
-SELECT b.stop_id, SUM(cp.total) as estimated_pop_800m
+SELECT b.stop_name, SUM(cp.total) as estimated_pop_800m
 FROM bus_stop_block_group as b
 JOIN census_population_adj as cp using(geoid)
-GROUP BY b.stop_id
+GROUP BY b.stop_name
 ORDER BY estimated_pop_800m desc
 LIMIT 1
