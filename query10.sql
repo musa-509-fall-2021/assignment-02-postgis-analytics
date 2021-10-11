@@ -20,3 +20,9 @@ the relationships. PostgreSQL's `CASE` statements may be helpful for some operat
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE 
   of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
 **/
+
+/** 
+    I imported Philadelphia Trees data and I am going to 
+    create a description for each stop by describing the closest 3 
+    trees to the stop.
+**/

@@ -24,6 +24,7 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+Snyder Ave & 9th Street - 100,130
 
 
 2. Which bus stop has the smallest population within 800 meters?
@@ -37,6 +38,8 @@
       the_geom geometry(Point, 4326) -- The geometry of the bus stop
   )
   ```
+
+Norcom Rd & Charter Rd - MBFS - 2
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
@@ -66,9 +69,45 @@ Oxford Valley Mall (43,658m)
 
   **Description:**
 
+
+I started by download neighborhoods_philadelphia from OpenDataPhilly
+and used python to import into postgis and created a `neighborhoods_philadelphia` table.
+
+My accessibility metric is going to be composed of two measures:
+1) the percentage of bus stops within a neighborhood that are wheelchair accessible 
+2) the density of bus stops within the neighborhood (eg. 0.8 stops / 100m^2).
+
+This second measure is important to include given that most neighborhoods
+have near 100% wheelchair accessible bus stops. The theory is that if a a neighborhood
+is dense with bus stops then they are easier to travel to and use by people.
+
+The score is calculated by multiplying these two values together, and then multiplying
+this by a factor of 10 to get a human-friendly score.
+
+
+Example: Rittenhouse (Accessibility score of 67.71)
+1) 96.1% – 103 bus stops of which 99 are wheelchair accessible
+2) .000007 - 103 bus stops across 14,620,958 square meters (about 5.65 square miles)
+
+~96.1% * ~.000007 * 10^7 provides the score of 67.71.
+
 6. What are the _top five_ neighborhoods according to your accessibility metric?
 
+ 1. Washington Square (78.70)
+ 2. Newbold (76.57)
+ 3. Spring Garden (70.84)
+ 4. Hawthorne (70.57)
+ 5. Francisville (69.56)
+
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
+
+ 6.   Industrial (2.43)
+ 7.   Airport (2.05)
+ 8.   Navy Yard (1.75)
+ 9.   West Torresdale (1.72)
+ 10.  Port Richmond (1.17)
+
+I'm realizing a more mature version of this metric might be more based off total number of roads, rather than overall area since there are likely fewer roads in Airport + Navy Yard neighborhoods. I'm also confused why the data set is onlyshowing two bus stops in Port Richmond – there should definitely be more than that (on Aramingo Ave and Richmond St).
 
   **Both #6 and #7 should have the structure:**
   ```sql
