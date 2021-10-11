@@ -22,13 +22,16 @@ with university_city as (
 	JOIN university_city as c
 	ON ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(p.geometry, 32129))
 	WHERE p."OWNER1" LIKE '%PENN%'
+), penn_pwd_parcels_union as (
+	SELECT ST_Envelope(ST_Union(p.geometry)) as geometry
+	FROM penn_pwd_parcels AS p
 ), uc_block_groups as (
 	SELECT b.geoid10 as geoid, b.geometry as geometry
 	FROM census_block_groups as b
 	JOIN university_city as c
 	ON ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(b.geometry, 32129))
-)
+) 
 SELECT COUNT(DISTINCT geoid) as count_block_groups
 FROM uc_block_groups as ucbg
-JOIN penn_pwd_parcels as ppp
-ON ST_Intersects(ST_Transform(ucbg.geometry, 32129), ST_Transform(ppp.geometry, 32129))
+JOIN penn_pwd_parcels_union as pppu
+ON ST_Intersects(ST_Transform(ucbg.geometry, 32129), ST_Transform(pppu.geometry, 32129))

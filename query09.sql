@@ -10,7 +10,7 @@ group that contains Meyerson Hall. ST_MakePoint() and functions like that are no
   ```
 **/
 
-with university_city as (
+WITH university_city as (
 	SELECT * FROM neighborhoods_philadelphia AS n WHERE n."NAME" = 'UNIVERSITY_CITY'
 ), penn_pwd_parcels as (
 	SELECT p."ADDRESS" as address, p."OWNER1" as owner1, p."OWNER2" as owner2, p."geometry" as geometry
