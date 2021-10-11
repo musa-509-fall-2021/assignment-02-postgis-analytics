@@ -8,8 +8,11 @@ Using the shapes.txt file from GTFS bus feed, find the two routes with the longe
 WITH copy_shapes AS (
 	select * 
     FROM SEPTA_BUS_SHAPES)
-, joined as (
-	select 
+
+select 
+	shape_id as trip_headsign,
+	sum(st_distance(st_transform(geo_1,32129),st_transform(geo_2,32129))) as trip_length
+from (select 
 		a.shape_id,
 		a.shape_pt_sequence as sps_1,
 		a.the_geom as geo_1,
@@ -17,12 +20,7 @@ WITH copy_shapes AS (
 		b.the_geom as geo_2
 	from septa_bus_shapes as a
 	left join copy_shapes as b 
-	on a.shape_id = b.shape_id and a.shape_pt_sequence = b.shape_pt_sequence-1)
-
-select 
-	shape_id as trip_headsign,
-	sum(st_distance(st_transform(geo_1,32129),st_transform(geo_2,32129))) as trip_length
-from joined
+	on a.shape_id = b.shape_id and a.shape_pt_sequence = b.shape_pt_sequence-1) as q
 group by 1
 order by 2 DESC
 limit 2
