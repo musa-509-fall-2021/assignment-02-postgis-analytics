@@ -14,3 +14,11 @@ with septa_bus_lines as (
 select shape_id as trip_headsign,
        ST_Length(linepath) as trip_length
 	   FROM septa_bus_lines
+	   order by trip_length
+	   desc
+	   limit 2
+
+/*
+  266630 46504meters
+  266697 45331meters
+*/
