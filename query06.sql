@@ -12,11 +12,11 @@
 **/
 
 with bus_stop_geom as (		
-select stop_id, stop_name, wheelchair_boarding, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) AS geometry
+	select stop_id, stop_name, wheelchair_boarding, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) AS geometry
 	from septa_bus_stops
 ),
 bus_stop_neighborhoods as (
-select *
+	select *
 	from neighborhoods_philadelphia as n
 	join bus_stop_geom as b on
 	ST_Within(

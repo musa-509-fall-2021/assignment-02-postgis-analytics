@@ -10,24 +10,25 @@ group that contains Meyerson Hall. ST_MakePoint() and functions like that are no
   ```
 **/
 
-WITH university_city as (
-	SELECT * FROM neighborhoods_philadelphia AS n WHERE n."NAME" = 'UNIVERSITY_CITY'
+with university_city as (
+	select * from neighborhoods_philadelphia as n where n."NAME" = 'UNIVERSITY_CITY'
 ), penn_pwd_parcels as (
-	SELECT p."ADDRESS" as address, p."OWNER1" as owner1, p."OWNER2" as owner2, p."geometry" as geometry
-	FROM phl_pwd_parcels as p
-	JOIN university_city as c
-	ON ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(p.geometry, 32129))
-	WHERE p."OWNER1" LIKE '%PENN%'
+	select p."ADDRESS" as address, p."OWNER1" as owner1, p."OWNER2" as owner2, p."geometry" as geometry
+	from phl_pwd_parcels as p
+	join university_city as c
+	on ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(p.geometry, 32129))
+	where p."OWNER1" LIKE '%PENN%'
 ), uc_block_groups as (
-	SELECT b.geoid10 as geoid, b.geometry as geometry
-	FROM census_block_groups as b
-	JOIN university_city as c
-	ON ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(b.geometry, 32129))
-) SELECT geoid AS geo_id
-FROM penn_pwd_parcels AS p
-JOIN uc_block_groups AS b
-ON ST_Intersects(ST_Transform(p.geometry, 32129), ST_Transform(b.geometry, 32129))
-WHERE p.address LIKE '%221 S 34TH ST%'
+	select b.geoid10 as geoid, b.geometry as geometry
+	from census_block_groups as b
+	join university_city as c
+	on ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(b.geometry, 32129))
+)
+select geoid as geo_id
+from penn_pwd_parcels as p
+join uc_block_groups as b
+on ST_Intersects(ST_Transform(p.geometry, 32129), ST_Transform(b.geometry, 32129))
+where p.address like '%221 S 34TH ST%'
 
 /*
 

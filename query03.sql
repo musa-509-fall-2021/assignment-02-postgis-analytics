@@ -22,15 +22,15 @@ meters. Order by distance (largest on top).
 -- then order by distance descending
 
 with bus_stop_geom as (		
-	select stop_id, stop_name, ST_SetSRID(ST_Point(stop_lon, stop_lat),6) AS geometry
-	FROM septa_bus_stops
+	select stop_id, stop_name, ST_SetSRID(ST_Point(stop_lon, stop_lat),6) as geometry
+	from septa_bus_stops
 ),
 phl_pwd_parcels_lim as (
 	select *
-	FROM phl_pwd_parcels
-	LIMIT 20
+	from phl_pwd_parcels
+	limit 20
 )
-SELECT *
+select *
 from phl_pwd_parcels_lim
 as pwd
 cross join lateral (

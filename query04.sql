@@ -13,16 +13,16 @@ that corresponds to the `shape_id` of this route and the length of the trip.
 **/
 
 with septa_bus_lines as (
-	SELECT shape_id, ST_MakeLine(ST_Transform(ST_SetSRID(ST_Point(shape_pt_lon,shape_pt_lat),4326),32129) ORDER BY shape_pt_sequence) As line_geom
-	FROM septa_bus_shapes As bus
-	GROUP BY shape_id
+	select shape_id, ST_MakeLine(ST_Transform(ST_SetSRID(ST_Point(shape_pt_lon,shape_pt_lat),4326),32129) order by shape_pt_sequence) as line_geom
+	from septa_bus_shapes as bus
+	group by shape_id
 ),
 septa_headsigns as (
-  SELECT DISTINCT shape_id, trip_headsign
-  FROM septa_bus_trips
+  select distinct shape_id, trip_headsign
+  from septa_bus_trips
 )
-SELECT h.trip_headsign, ST_Length(l.line_geom) as trip_length
-FROM septa_bus_lines AS l
-JOIN septa_headsigns as h USING (shape_id)
-ORDER BY trip_length desc
-LIMIT 2
+select h.trip_headsign, ST_Length(l.line_geom) as trip_length
+from septa_bus_lines as l
+join septa_headsigns as h using (shape_id)
+order by trip_length desc
+limit 2

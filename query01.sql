@@ -17,25 +17,25 @@
         )
 */		
 with bus_stop_geom as (		
-select stop_id, stop_name, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) AS geometry
-	FROM septa_bus_stops
+select stop_id, stop_name, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) as geometry
+	from septa_bus_stops
 ),
 bus_stop_block_group as (
 	select b.stop_id, b.stop_name, bg.geoid10 as geoid
 	from bus_stop_geom as b
 	join census_block_groups as bg
-	ON ST_Intersects(
+	on ST_Intersects(
 		ST_Buffer(ST_Transform(b.geometry, 32129),800),
 		ST_Transform(bg.geometry,32129)
 	)
 ),
 census_population_adj as (
-	select SUBSTRING(p.id, 10) AS geoid, total
+	select SUBSTRING(p.id, 10) as geoid, total
 	from census_population as p
 )
-SELECT b.stop_name, SUM(cp.total) as estimated_pop_800m
-FROM bus_stop_block_group as b
-JOIN census_population_adj as cp using(geoid)
-GROUP BY b.stop_name
-ORDER BY estimated_pop_800m desc
-LIMIT 1
+select b.stop_name, SUM(cp.total) as estimated_pop_800m
+from bus_stop_block_group as b
+join census_population_adj as cp using(geoid)
+group by b.stop_name
+order by estimated_pop_800m desc
+limit 1

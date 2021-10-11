@@ -15,23 +15,23 @@ CREATE INDEX parcels_ownr1_idx ON phl_pwd_parcels("OWNER1");
 CREATE INDEX parcels_ownr2_idx ON phl_pwd_parcels("OWNER2");
 
 with university_city as (
-	SELECT * FROM neighborhoods_philadelphia AS n WHERE n."NAME" = 'UNIVERSITY_CITY'
+	select * from neighborhoods_philadelphia as n where n."NAME" = 'UNIVERSITY_CITY'
 ), penn_pwd_parcels as (
-	SELECT p."OWNER1" as owner1, p."OWNER2" as owner2, p."geometry" as geometry
-	FROM phl_pwd_parcels as p
-	JOIN university_city as c
-	ON ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(p.geometry, 32129))
-	WHERE p."OWNER1" LIKE '%PENN%'
+	select p."OWNER1" as owner1, p."OWNER2" as owner2, p."geometry" as geometry
+	from phl_pwd_parcels as p
+	join university_city as c
+	on ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(p.geometry, 32129))
+	where p."OWNER1" LIKE '%PENN%'
 ), penn_pwd_parcels_union as (
-	SELECT ST_Envelope(ST_Union(p.geometry)) as geometry
-	FROM penn_pwd_parcels AS p
+	select ST_Envelope(ST_Union(p.geometry)) as geometry
+	from penn_pwd_parcels as p
 ), uc_block_groups as (
-	SELECT b.geoid10 as geoid, b.geometry as geometry
-	FROM census_block_groups as b
-	JOIN university_city as c
-	ON ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(b.geometry, 32129))
+	select b.geoid10 as geoid, b.geometry as geometry
+	from census_block_groups as b
+	join university_city as c
+	on ST_Intersects(ST_Transform(c.geometry, 32129), ST_Transform(b.geometry, 32129))
 ) 
-SELECT COUNT(DISTINCT geoid) as count_block_groups
-FROM uc_block_groups as ucbg
-JOIN penn_pwd_parcels_union as pppu
-ON ST_Intersects(ST_Transform(ucbg.geometry, 32129), ST_Transform(pppu.geometry, 32129))
+select COUNT(DISTINCT geoid) as count_block_groups
+from uc_block_groups as ucbg
+join penn_pwd_parcels_union as pppu
+on ST_Intersects(ST_Transform(ucbg.geometry, 32129), ST_Transform(pppu.geometry, 32129))

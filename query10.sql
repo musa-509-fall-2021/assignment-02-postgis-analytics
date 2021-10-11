@@ -27,11 +27,12 @@ the relationships. PostgreSQL's `CASE` statements may be helpful for some operat
     trees are within 400m from the stop!
 **/
 
-WITH septa_rail_stops_geom as (
-	SELECT stop_id, stop_name, stop_lat, stop_lon, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) AS geometry
-	FROM septa_rail_stops
-),  SELECT stop_id, stop_name, CONCAT('There are ', count(t."OBJECTID"), ' trees near this station') AS stop_desc, stop_lon, stop_lat
-	FROM phl_trees as t
-	RIGHT JOIN septa_rail_stops_geom as r
-	ON ST_DWithin(ST_Transform(r.geometry,32129), ST_Transform(t.geometry,32129),400)
-	GROUP BY stop_id, stop_name, stop_lat, stop_lon
+with septa_rail_stops_geom as (
+	select stop_id, stop_name, stop_lat, stop_lon, ST_SetSRID(ST_Point(stop_lon, stop_lat),4326) AS geometry
+	from septa_rail_stops
+) 
+select stop_id, stop_name, CONCAT('There are ', count(t."OBJECTID"), ' trees near this station') AS stop_desc, stop_lon, stop_lat
+from phl_trees as t
+right join septa_rail_stops_geom as r
+on ST_DWithin(ST_Transform(r.geometry,32129), ST_Transform(t.geometry,32129),400)
+group by stop_id, stop_name, stop_lat, stop_lon
