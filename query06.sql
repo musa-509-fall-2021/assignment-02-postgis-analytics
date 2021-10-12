@@ -10,6 +10,11 @@
 --   )
 --   ```
 
+DROP INDEX IF EXISTS neighborhoods_philadelphia_the_geom_idx;
+CREATE index neighborhoods_philadelphia_the_geom_idx
+	on neighborhoods_philadelphia
+	using GiST(st_transform(the_geom, 32129));
+
 with accessibleStops as (
 	select stop_id, the_geom
 	from septa_bus_stops
@@ -36,20 +41,33 @@ accessibilityIDXgeom as (
 	from accessibilityIDX a
 	left join septa_bus_stops s
 	on a.stop_id = s.stop_id
+), 
+nbhdAccessibleStops as (
+	select nbhd.name, count(*)
+	from neighborhoods_philadelphia nbhd
+	left join accessibleStops accStp 
+	on st_contains(nbhd.the_geom, st_transform(accStp.the_geom,32129))
+	group by nbhd.name
+), 
+nbhdInAccessibleStops as (
+	select nbhd.name, count(*)
+	from neighborhoods_philadelphia nbhd
+	left join inaccessibleStops inAccStp
+	on st_contains(nbhd.the_geom, st_transform(inAccStp.the_geom,32129))
+	group by nbhd.name
 )
 
 select nbhd.name as neighborhood_name, 
 		sum(aidxgeom.accessibility_metric) as accessibility_metric,
-		count(accStp.stop_id) as num_bus_stops_accessible,
-		count(inAccStp.stop_id) as num_bus_stops_inaccessible
+		max(accStp.count) as num_bus_stops_accessible,
+		max(inAccStp.count) as num_bus_stops_inaccessible
 from neighborhoods_philadelphia nbhd
-	left join accessibilityIDXgeom aidxgeom 
-	on st_contains(st_transform(nbhd.the_geom,32129), aidxgeom.the_geom)
-	left join accessibleStops accStp 
-	on st_contains(st_transform(nbhd.the_geom,32129), st_transform(accStp.the_geom,32129))
-	left join inaccessibleStops inAccStp
-	on st_contains(st_transform(nbhd.the_geom,32129), st_transform(inAccStp.the_geom,32129))
+	join accessibilityIDXgeom aidxgeom 
+	on st_contains(nbhd.the_geom, aidxgeom.the_geom)
+	left join nbhdAccessibleStops accStp 
+	on nbhd.name = accStp.name
+	left join nbhdInAccessibleStops inAccStp
+	on nbhd.name = inAccStp.name
 group by nbhd.name
 order by accessibility_metric desc
 limit 5;
-
