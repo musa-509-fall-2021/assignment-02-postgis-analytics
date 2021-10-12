@@ -1,6 +1,6 @@
 # Assignment 02: PostGIS Analytics
 
-**Due: Oct 11, 2021 by 11:59pm ET**
+**Due: Oct 18, 2021 by 11:59pm ET**
 
 ## Submission Instructions
 
