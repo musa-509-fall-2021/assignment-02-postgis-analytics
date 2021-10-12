@@ -1,9 +1,7 @@
 -- CREATE EXTENSION postgis; --
 
--- Clear database of table --
-DROP TABLE IF EXISTS septa_bus_stops;
-
 -- PHL Bus stops --
+DROP TABLE IF EXISTS septa_bus_stops;
 CREATE TABLE septa_bus_stops (
     stop_id				NUMERIC(7) PRIMARY KEY NOT NULL,
     stop_name			VARCHAR(65) NOT NULL, 
@@ -26,9 +24,10 @@ ALTER TABLE septa_bus_stops ADD COLUMN the_geom geometry(Point, 4326);
 UPDATE septa_bus_stops SET the_geom = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat),4326);
 
 
-DROP TABLE IF EXISTS population;
+
 
 -- PHL Census Block Group Population join w/ census_block_groups_2010 --
+DROP TABLE IF EXISTS population;
 CREATE TABLE population (
     id		VARCHAR(23) PRIMARY KEY NOT NULL,
     name	VARCHAR(75) NOT NULL, 
@@ -39,6 +38,7 @@ COPY population(id, name, total)
 FROM 'C:\Users\Public\CloudComputing_data\PHL_2010_blockGroupPopulation\phl_2010_blockGroup_population.csv' 
 DELIMITER ',' 
 CSV HEADER;
+
 
 -- Septa Bus Routes --
 DROP TABLE IF EXISTS septa_bus_routes;
@@ -59,23 +59,30 @@ CSV HEADER;
 ALTER TABLE septa_bus_routes ADD COLUMN the_geom geometry(Point, 4326);
 UPDATE septa_bus_routes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326);
 
+
+
 -- Edit block group shp geom column name & set its crs --
 -- ALTER TABLE census_block_groups RENAME COLUMN geom TO the_geom;
-UPDATE census_block_groups SET the_geom = ST_Transform(ST_SetSRID(the_geom, 4326),32129);
+--UPDATE census_block_groups SET the_geom = ST_Transform(ST_SetSRID(the_geom, 4326),32129);
 
 -- Edit parcels shp geom column name & set its crs --
 -- ALTER TABLE pwd_parcels RENAME COLUMN geom TO the_geom;
-UPDATE pwd_parcels SET the_geom = ST_Transform(ST_SetSRID(the_geom, 4326),32129);
+--UPDATE pwd_parcels SET the_geom = ST_Transform(ST_SetSRID(the_geom, 4326),32129);
+
 
 --ALTER TABLE neighborhoods_philadelphia RENAME COLUMN geom to the_geom;
+--UPDATE neighborhoods_philadelphia SET the_geom = ST_Transform(ST_SetSRID(the_geom, 2272),32129);
+
+
+
 
 -- Create spatial indices --
-DROP INDEX IF EXISTS septa_bus_stops_the_geom_idx;
-create index septa_bus_stops_the_geom_idx
-    on septa_bus_stops
-    using GiST(the_geom);
+-- DROP INDEX IF EXISTS septa_bus_stops_the_geom_idx;
+-- create index septa_bus_stops_the_geom_idx
+--     on septa_bus_stops
+--     using GiST(st_transform(the_geom, 32129));
 	
-DROP INDEX IF EXISTS pwd_parcels_the_geom_idx;
-CREATE index pwd_parcels_the_geom_idx
-	on pwd_parcels
-	using GiST(the_geom);
+-- DROP INDEX IF EXISTS pwd_parcels_the_geom_idx;
+-- CREATE index pwd_parcels_the_geom_idx
+-- 	on pwd_parcels
+-- 	using GiST(the_geom);

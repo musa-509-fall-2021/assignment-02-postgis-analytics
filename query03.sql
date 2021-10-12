@@ -10,11 +10,15 @@
 --       distance_m double precision  -- The distance apart in meters
 --   )
 --   ```
+DROP INDEX IF EXISTS septa_bus_stops_the_geom_idx;
+create index septa_bus_stops_the_geom_idx
+    on septa_bus_stops
+    using GiST(st_transform(the_geom, 32129));
 
 DROP INDEX IF EXISTS pwd_parcels_the_geom_idx;
 CREATE index pwd_parcels_the_geom_idx
 	on pwd_parcels
-	using GiST(the_geom);
+	using GiST(st_transform(the_geom, 32129));
 
 with parcels as(
 	select the_geom, address
@@ -28,7 +32,7 @@ with parcels as(
 select address, stop_name, distance_m
 from parcels as p
 	cross join lateral(
-		select stop_name, p.the_geom <-> st_transform(s.the_geom,32129)as distance_m
+		select stop_name, st_transform(p.the_geom,32129) <-> st_transform(s.the_geom,32129) as distance_m
 		from bus_stops s
 		order by distance_m
 		limit 1
