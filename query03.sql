@@ -23,7 +23,6 @@ CREATE index pwd_parcels_the_geom_idx
 with parcels as(
 	select the_geom, address
 	from pwd_parcels
-	--where address like '%SPRING GARDEN%'
 ), bus_stops as (
 	select stop_name, the_geom
 	from septa_bus_stops
