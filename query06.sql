@@ -15,59 +15,50 @@ CREATE index neighborhoods_philadelphia_the_geom_idx
 	on neighborhoods_philadelphia
 	using GiST(st_transform(the_geom, 32129));
 
-with accessibleStops as (
-	select stop_id, the_geom
-	from septa_bus_stops
-	where wheelchair_boarding = 1
+DROP INDEX IF EXISTS stopBufferIDX;
+CREATE INDEX stopBufferIDX
+	on septa_bus_stops
+	using GiST(st_buffer(st_transform(the_geom,32129),322));
+
+-- Remove bus stops outside of County of PHL limits 
+with PHL as(
+	select st_union(the_geom) as the_geom
+	from neighborhoods_philadelphia nbhd
 ), 
-inaccessibleStops as (
-	select stop_id, the_geom
-	from septa_bus_stops
-	where wheelchair_boarding = 0 OR wheelchair_boarding = 2
+stops as (
+	select stop_id, wheelchair_boarding, s.the_geom as the_geom
+	from septa_bus_stops s, PHL
+	where st_contains(PHL.the_geom, st_transform(s.the_geom,32129))
 ), 
+-- Buffer radius of 322 meters = 0.2 miles --
 accessibleBuffers as (
 	select stop_id, st_buffer(st_transform(the_geom,32129),322) as the_geom
-	from accessibleStops
+	from stops
+	where wheelchair_boarding = 1
 ), 
-accessibilityIDX as (
-	select stop_id, count(*) as accessibility_metric
+stop_accessibilityScore as (
+	select s.stop_id as stop_id, count(distinct(pcls.the_geom)) as accessibility_metric,
+		st_transform(s.the_geom,32129) as the_geom
 	from accessibleBuffers buf
 	left join pwd_parcels pcls
 	on st_contains(buf.the_geom, pcls.the_geom)
-	group by stop_id
-), 
-accessibilityIDXgeom as (
-	select a.stop_id as stop_id, a.accessibility_metric as accessibility_metric, st_transform(s.the_geom,32129) as the_geom
-	from accessibilityIDX a
 	left join septa_bus_stops s
-	on a.stop_id = s.stop_id
+	on buf.stop_id = s.stop_id
+	group by s.stop_id
 ), 
-nbhdAccessibleStops as (
-	select nbhd.name, count(*)
+nbhd_counts as (
+	select nbhd.name,
+		sum(accScore.accessibility_metric) as accessibility_metric,
+		count(*) filter(where wheelchair_boarding=1) as num_bus_stops_accessible,
+		count(*) filter(where wheelchair_boarding=2) as num_bus_stops_accessible
 	from neighborhoods_philadelphia nbhd
-	left join accessibleStops accStp 
-	on st_contains(nbhd.the_geom, st_transform(accStp.the_geom,32129))
+		left join stop_accessibilityScore accScore
+		on st_contains(nbhd.the_geom, accScore.the_geom)
+		left join stops 
+		on st_contains(nbhd.the_geom, st_transform(stops.the_geom,32129))
 	group by nbhd.name
-), 
-nbhdInAccessibleStops as (
-	select nbhd.name, count(*)
-	from neighborhoods_philadelphia nbhd
-	left join inaccessibleStops inAccStp
-	on st_contains(nbhd.the_geom, st_transform(inAccStp.the_geom,32129))
-	group by nbhd.name
+	order by accessibility_metric desc
+	limit 5
 )
 
-select nbhd.name as neighborhood_name, 
-		sum(aidxgeom.accessibility_metric) as accessibility_metric,
-		max(accStp.count) as num_bus_stops_accessible,
-		max(inAccStp.count) as num_bus_stops_inaccessible
-from neighborhoods_philadelphia nbhd
-	join accessibilityIDXgeom aidxgeom 
-	on st_contains(nbhd.the_geom, aidxgeom.the_geom)
-	left join nbhdAccessibleStops accStp 
-	on nbhd.name = accStp.name
-	left join nbhdInAccessibleStops inAccStp
-	on nbhd.name = inAccStp.name
-group by nbhd.name
-order by accessibility_metric desc
-limit 5;
+select * from nbhd_counts
