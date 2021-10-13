@@ -41,15 +41,15 @@
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
-  In this question, I want to investigate the accessibility index by neighbourhoods size, and the proportion of accessible bus stops and inaccessible bus stops.
+    In this question, I want to investigate the accessibility index by neighbourhoods size, and the proportion of accessible bus stops and inaccessible bus stops.
   
-  Thus the function would be: (the proportion between accessible: inaccessible) devided by the shape area. However, since some neighbors do not have inaccessible bus stops,	I will add 1 to the num_bus_stops_inaccessible in the syntax.
+    Thus the function would be: (the proportion between accessible: inaccessible) devided by the shape area. However, since some neighbors do not have inaccessible bus stops,	I will add 1 to the num_bus_stops_inaccessible in the syntax.
   
-  The final metric function is shown below:
- ```sql
-(
- (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
-)
+    The final metric function is shown below:
+   ```sql
+   (
+   (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
+   )
   ```
 6. What are the _top five_ neighborhoods according to your accessibility metric?
    
