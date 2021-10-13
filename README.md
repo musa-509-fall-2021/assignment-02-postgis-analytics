@@ -33,26 +33,11 @@
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
   
   See file query03.sql
-  **Structure:**
-  ```sql
-  (
-      address text,  -- The address of the parcel
-      stop_name text,  -- The name of the bus stop
-      distance_m double precision  -- The distance apart in meters
-  )
-  ```
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
    
    266630 46504meters
    266697 45331meters
-  **Structure:**
-  ```sql
-  (
-      trip_headsign text,  -- Headsign of the trip
-      trip_length double precision  -- Length of the trip in meters
-  )
-  ```
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
@@ -62,7 +47,7 @@
   
   The final metric function is shown below:
  ```sql
-  (
+(
  (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
 )
   ```
@@ -72,16 +57,16 @@
    
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
-  Southwest Schuylkill, Cedar Park, Paschall, Bartram Village, Woodland Terrace
+    Southwest Schuylkill, Cedar Park, Paschall, Bartram Village, Woodland Terrace
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
-  23
+    23
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
-  geo_id = 421010369001
+    geo_id = 421010369001
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
-  see file query10.sql
+    see file query10.sql
