@@ -23,21 +23,16 @@
 ## Questions
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
-
+   
+   Passyunk Av & 15th St, with estimated pop within 800m of 50867
+   
 2. Which bus stop has the smallest population within 800 meters?
 
-  **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
-
-  ```sql
-  (
-      stop_name text, -- The name of the station
-      estimated_pop_800m integer, -- The population within 800 meters
-      the_geom geometry(Point, 4326) -- The geometry of the bus stop
-  )
-  ```
+  Charter Rd& Norcom Rd, population within 800m of 2
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
-
+  
+  See file query03.sql
   **Structure:**
   ```sql
   (
@@ -48,7 +43,9 @@
   ```
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
-
+   
+   266630 46504meters
+   266697 45331meters
   **Structure:**
   ```sql
   (
@@ -59,53 +56,32 @@
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
-  **Description:**
-
+  In this question, I want to investigate the accessibility index by neighbourhoods size, and the proportion of accessible bus stops and inaccessible bus stops.
+  
+  Thus the function would be: (the proportion between accessible: inaccessible) devided by the shape area. However, since some neighbors do not have inaccessible bus stops,	I will add 1 to the num_bus_stops_inaccessible in the syntax.
+  
+  The final metric function is shown below:
+ ```sql
+  (
+ (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
+)
+  ```
 6. What are the _top five_ neighborhoods according to your accessibility metric?
-
+   
+   Hawthorne, Francisville, Walnut Hill, Fairmount, West Passyunk
+   
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
-  **Both #6 and #7 should have the structure:**
-  ```sql
-  (
-    neighborhood_name text,  -- The name of the neighborhood
-    accessibility_metric ...,  -- Your accessibility metric value
-    num_bus_stops_accessible integer,
-    num_bus_stops_inaccessible integer
-  )
-  ```
+  Southwest Schuylkill, Cedar Park, Paschall, Bartram Village, Woodland Terrace
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
-  **Structure (should be a single value):**
-  ```sql
-  (
-      count_block_groups integer
-  )
-  ```
+  23
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
-  **Structure (should be a single value):**
-  ```sql
-  (
-      geo_id text
-  )
-  ```
+  geo_id = 421010369001
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
-  **Structure:**
-  ```sql
-  (
-      stop_id integer,
-      stop_name text,
-      stop_desc text,
-      stop_lon double precision,
-      stop_lat double precision
-  )
-  ```
-
-  As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
-
-  **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
+  see file query10.sql
