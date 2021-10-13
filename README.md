@@ -51,6 +51,7 @@
    (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
    )
   ```
+  
 6. What are the _top five_ neighborhoods according to your accessibility metric?
    
    Hawthorne, Francisville, Walnut Hill, Fairmount, West Passyunk
