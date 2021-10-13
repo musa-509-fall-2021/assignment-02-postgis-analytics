@@ -28,11 +28,11 @@
    
 2. Which bus stop has the smallest population within 800 meters?
 
-  Charter Rd& Norcom Rd, population within 800m of 2
+    Charter Rd& Norcom Rd, population within 800m of 2
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
   
-  See file query03.sql
+    See file query03.sql
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
    
@@ -46,10 +46,8 @@
     Thus the function would be: (the proportion between accessible: inaccessible) devided by the shape area. However, since some neighbors do not have inaccessible bus stops,	I will add 1 to the num_bus_stops_inaccessible in the syntax.
   
     The final metric function is shown below:
-   
-   ```sql
-   (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
-  ```
+
+          (num_bus_stops_accessible/(num_bus_stops_inaccessible+1))/shape_area as accessibility_metric
   
 6. What are the _top five_ neighborhoods according to your accessibility metric?
    
