@@ -64,11 +64,11 @@ nbhdAZpclCount as (
 	on st_contains(nbhdZns.the_geom, pcls.the_geom)
 	group by nbhdZns.name
 ), 
-Count number of accessible / inaccessible stops by PHL neighborhoods
+-- Count number of accessible / inaccessible stops by PHL neighborhoods
 nbhdCounts as (
 	select nbhd.name,
 	count(*) filter(where wheelchair_boarding=1) as num_bus_stops_accessible,
-	count(*) filter(where wheelchair_boarding=2) as num_bus_stops_accessible
+	count(*) filter(where wheelchair_boarding=2) as num_bus_stops_inaccessible
 	from neighborhoods_philadelphia nbhd
 	left join stops
 	on st_contains(nbhd.the_geom, st_transform(stops.the_geom,32129))
@@ -76,27 +76,13 @@ nbhdCounts as (
 )
 
 select nc.name as neighborhood_name, 
-		accessibility_metric, 
-		num_bus_stops_accessible, 
-		num_bus_stops_accessible
+		nazc.accessibility_metric, 
+		nc.num_bus_stops_accessible, 
+		nc.num_bus_stops_inaccessible
 from nbhdCounts nc
 full join nbhdAZpclCount nazc
 on nc.name = nazc.name
+order by accessibility_metric desc
+limit 5
 
 -- select * from nbhdCounts
-
-
-
--- select nbhdZns.name,
--- 	count(pcls.gid) as accessibility_metric
--- -- 	,
--- -- 	count(*) filter(where wheelchair_boarding=1) as num_bus_stops_accessible,
--- -- 	count(*) filter(where wheelchair_boarding=2) as num_bus_stops_accessible
--- from nbhdAccessibleZones nbhdZns
--- 	left join pwd_parcels pcls
--- 	on st_contains(nbhdZns.the_geom, pcls.the_geom)
--- -- 	left join stops 
--- -- 	on st_contains(nbhdZns.the_geom, st_transform(stops.the_geom,32129))
--- group by nbhdZns.name
--- order by accessibility_metric desc
--- limit 5
