@@ -16,4 +16,4 @@
 
 -- This index will be aggregated at the neighborhood level, and paired with a count of the wheelchair accessible stops in each neighborhood.
 
-select * from pwd_parcels
+select count(*) from pwd_parcels

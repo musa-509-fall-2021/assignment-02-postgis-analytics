@@ -10,6 +10,10 @@
 --   )
 --   ```
 
+
+-- Try unionized buffer, then st_intersection of that buffer w/ nbhds to get neighborhood accessibility regions
+-- then count the # parcels within the stop buffers
+
 DROP INDEX IF EXISTS neighborhoods_philadelphia_the_geom_idx;
 CREATE index neighborhoods_philadelphia_the_geom_idx
 	on neighborhoods_philadelphia
