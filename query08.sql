@@ -1,6 +1,6 @@
 /*
 data source: https://opendataphilly.org/dataset/philadelphia-universities-and-colleges
-query9: With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
+query8: With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 */
 
 
@@ -18,5 +18,5 @@ from (
 
 /*
 count_block_groups
-191
+9
 */
