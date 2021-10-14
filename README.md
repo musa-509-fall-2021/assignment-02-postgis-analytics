@@ -78,6 +78,8 @@
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
   **Answer:** 44
+  
+  **Discussion:** The PWD parcels dataset lists the owners of record for each of the parcels. The relevant owner for defining Penn's campus is The Trustees of the University of Pennsylvania (abbreviated in the dataset as "TRUSTEES OF THE UNIVERSIT." Penn's campus could thus be defined by filtering the PWD parcels dataset to return only those parcels owned by the Trustees.
 
   **Structure (should be a single value):**
   ```sql
