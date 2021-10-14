@@ -77,6 +77,8 @@
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
+  **Answer:** 44
+
   **Structure (should be a single value):**
   ```sql
   (
