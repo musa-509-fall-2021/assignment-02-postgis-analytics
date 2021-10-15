@@ -35,11 +35,7 @@ septa_bus_stop_surrounding_population as (
         stop_id,
         sum(total) as estimated_pop_800m
     from septa_bus_stop_block_groups as s
-<<<<<<< HEAD
     join census_population as p on geo_id=id
-=======
-    join census_population as p on (s.geo_id = p.id)
->>>>>>> c4d4dee05f6ae426e14c12241245e80ac79d9109
     group by stop_id
 )
 
