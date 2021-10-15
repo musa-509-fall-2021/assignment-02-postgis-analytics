@@ -1,4 +1,7 @@
-/* stop_desc demo: 
+/* 
+data source: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=7021
+
+stop_desc demo: 
 There are 6 park(s) within 1.5km of this stop, at the 33th percentile among the park number of all stops. And here are 3 of them which is/are the closest. :) 
 
 1. Nicetown Park at 4369-71 GERMANTOWN AVE which is 847m N (10 mins walk) of the stop.

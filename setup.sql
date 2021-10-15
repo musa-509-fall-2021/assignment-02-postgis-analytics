@@ -47,7 +47,7 @@ set the_geom = st_transform(
 select st_astext(the_geom) from septa_bus_shapes
 limit 10;
 
--- septa_bus_shapes
+-- neighborhood
 ALTER TABLE neighborhood
 ADD COLUMN the_geom geometry;
 
