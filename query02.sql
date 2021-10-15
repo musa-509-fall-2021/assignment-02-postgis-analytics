@@ -1,22 +1,3 @@
-/*
-  Which bus stop has the largest population within 800 meters? As a rough
-  estimation, consider any block group that intersects the buffer as being part
-  of the 800 meter buffer.
-*/
-
-
-/*
-  postgres database file :
-  https://drive.google.com/file/d/1knvX-PO8a8pzZiRyL8IFDi8xCgjGCOpJ/view?usp=sharing
-  setup file:
-  ./setup.sql
-*/
-
-create index septa_bus_stops__the_geom__32129__idx
-    on septa_bus_stops
-    using GiST (ST_Transform(the_geom, 32129));
-
-
 with septa_bus_stop_block_groups as (
     select
         s.stop_id,
@@ -45,5 +26,5 @@ select
     st_transform (the_geom,4326) the_geom
 from septa_bus_stop_surrounding_population
 join septa_bus_stops using (stop_id)
-order by estimated_pop_800m desc
+order by estimated_pop_800m
 limit 1

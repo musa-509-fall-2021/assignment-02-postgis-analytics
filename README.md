@@ -24,6 +24,8 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+A: "Passyunk Av & 15th St" has the largest population of 50867.
+
 2. Which bus stop has the smallest population within 800 meters?
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
@@ -36,6 +38,8 @@
   )
   ```
 
+  A: "Charter Rd & Norcom Rd" has the smallest population of 2.
+
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
   **Structure:**
@@ -46,6 +50,16 @@
       distance_m double precision  -- The distance apart in meters
   )
   ```
+| address          | stop_name                      | distance_m         |
+| ---------------- | ------------------------------ | ------------------ |
+| 170 SPRING LN    | Ridge Av & Ivins Rd            | 1658.7873935685589 |
+| 150 SPRING LN    | Ridge Av & Ivins Rd            | 1620.287986054119  |
+| 130 SPRING LN    | Ridge Av & Ivins Rd            | 1610.9941677070408 |
+| 190 SPRING LN    | Ridge Av & Ivins Rd            | 1490.0758681774478 |
+| 630 ST ANDREW RD | Germantown Av & Springfield Av | 1418.391081837042  |
+| ...              | ...                            | ...                |
+
+
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
@@ -56,12 +70,42 @@
       trip_length double precision  -- Length of the trip in meters
   )
   ```
+  
+| trip_headsign | trip_length        |
+| ------------- | ------------------ |
+| 266311        | 15445.022598532600 |
+| 266312        | 10044.302723522300 |
+| 266313        | 15445.022598532600 |
+| 266314        | 11149.195550009400 |
+| 266315        | 10982.949704948900 |
+
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
   **Description:**
 
+  ![](https://latex.codecogs.com/svg.latex?Score%20%3D%20WheelchairDensity%20*%20WheelchairPct%20%3D%5Cfrac%7BN%7D%7BS%7D%20*%20%5Cfrac%7BN%7D%7BN%27%7D)
+
+  > N: Number of stops with wheelchairs boarding
+  >
+  > N': Number of all stops
+  >
+  > S: Area of the neighborhood(km^2)
+  >
+  > \* Not known is considered as false.
+
+
 6. What are the _top five_ neighborhoods according to your accessibility metric?
+
+| **neighborhood_name**      | **accessibility_metric** | **num_bus_stops_accessible** | **num_bus_stops_inaccessible** |
+| -------------------------- | ------------------------ | ---------------------------- | ------------------------------ |
+| **Washington Square West** | 0.00008472025565149550   | 72                           | 2                              |
+| **Newbold**                | 0.00008254186446362420   | 45                           | 4                              |
+| **Spring Garden**          | 0.00007627525758323820   | 48                           | 2                              |
+| **Hawthorne**              | 0.00007601551498445400   | 30                           | 0                              |
+| **Francisville**           | 0.00007487622621403220   | 41                           | 0                              |
+
+
 
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
@@ -75,6 +119,18 @@
   )
   ```
 
+- 
+
+| **neighborhood_name** | **accessibility_metric** | **num_bus_stops_accessible** | **num_bus_stops_inaccessible** |
+| --------------------- | ------------------------ | ---------------------------- | ------------------------------ |
+| **Bartram Village**   | 0                        | 0                            | 14                             |
+| **Port Richmond**     | 0.000001263189033554710  | 2                            | 0                              |
+| **West Torresdale**   | 0.0000018492499673526600 | 1                            | 0                              |
+| **Navy Yard**         | 0.0000018794112591801200 | 14                           | 0                              |
+| **Airport**           | 0.0000021422035439600800 | 20                           | 0                              |
+
+  
+
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
   **Structure (should be a single value):**
@@ -83,6 +139,8 @@
       count_block_groups integer
   )
   ```
+  I choose ["Philadelphia Universities and Colleges"](https://www.opendataphilly.org/dataset/philadelphia-universities-and-colleges/resource/1e37f5f0-6212-4cb4-9d87-261b58ae01c4) dataset, adding a buffer of 80m and union the polygons. The result census block groups fully contained is 3.
+
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
@@ -92,6 +150,11 @@
       geo_id text
   )
   ```
+
+  |**geo_id**|
+  |---|
+  |421010369001|
+
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
@@ -107,5 +170,14 @@
   ```
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+  
+  
+  
+  I decided to find and list parks around the bus stops as a guide to people who want to go to park by bus. The point data of Philly is from [HERE](https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=7021). Below is the final result of `stop_desc`.
+  
+  > There are 6 park(s) within 1.5km of this stop, at the 33th percentile among the park number of all stops. And here are 3 of them which is/are the closest. :) 
+  > 1. Nicetown Park at 4369-71 GERMANTOWN AVE which is 847m N (10 mins walk) of the stop.
+  > 2. Fernhill Park at 4600 MORRIS ST which is 1128m W (14 mins walk) of the stop.
+  > 3. Hunting Park at 1101 W HUNTING PARK AVE which is 1237m NE (15 mins walk) of the stop.
 
   **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
