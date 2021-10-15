@@ -13,19 +13,12 @@ set the_geom =
         ),32129
     );
 
-SELECT *
-from septa_bus_stops
-limit 10;
-
 -- census_block_groups 
 ALTER TABLE census_block_groups
 ADD COLUMN the_geom geometry;
 
 update census_block_groups
 set the_geom = st_transform(geometry,32129);
-
-select * from census_population
-limit 10;
 
 -- phl_pwd_parcels
 ALTER TABLE phl_pwd_parcels
@@ -44,18 +37,12 @@ set the_geom = st_transform(
         st_point(shape_pt_lon,shape_pt_lat),4326
     ),32129);
 
-select st_astext(the_geom) from septa_bus_shapes
-limit 10;
-
 -- neighborhood
 ALTER TABLE neighborhood
 ADD COLUMN the_geom geometry;
 
 update neighborhood
 set the_geom = st_transform(geometry,32129);
-
-select st_astext(the_geom) from neighborhood
-limit 10;
 
 -- university
 ALTER TABLE university_phl
@@ -64,15 +51,9 @@ ADD COLUMN the_geom geometry;
 update university_phl
 set the_geom = st_transform(geometry,32129);
 
-select st_astext(the_geom) from university_phl
-limit 10;
-
 -- parks
 ALTER TABLE park_phl
 ADD COLUMN the_geom geometry;
 
 update park_phl
 set the_geom = st_transform(geometry,32129);
-
-select st_astext(the_geom) from park_phl
-limit 10;

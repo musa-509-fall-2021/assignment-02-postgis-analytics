@@ -5,6 +5,13 @@
 */
 
 
+/*
+  postgres database file :
+  https://drive.google.com/file/d/1knvX-PO8a8pzZiRyL8IFDi8xCgjGCOpJ/view?usp=sharing
+  setup file:
+  ./setup.sql
+*/
+
 create index septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
     using GiST (ST_Transform(the_geom, 32129));
