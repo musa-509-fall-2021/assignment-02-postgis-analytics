@@ -13,32 +13,42 @@
 */
 -- connect the population with groups
 
+UPDATE census_block_groups
+    set the_geom = st_setsrid(st_makepoint(intptlon10, intptlon10), 4326);
 
-with POP_DATA as (
-  select c.geoid10 as geo_id,
-c.namelsad10 as block_groups,
-d.total as population,
-st_setsrid(st_makepoint(c.intptlon10,c.intptlat10),4326)::geometry as the_geom
-from census_block_groups_2010 as c
-join
-decennialsf12010_p1_data_with_overlays_2021_09_09t131935 as d
-on cast(c.geoid10 as text) = substring(d.id,10)
+UPDATE septa_bus_stops
+      set the_geom = st_setsrid(st_makepoint(stop_lon, stop_lat), 4326);
+
+create index stops__the_geom__2272__idx
+          on septa_bus_stops
+          using GiST (ST_Transform(the_geom, 2272));
+
+with stops_block_800m as (
+    select c.geoid10,
+           s.stop_name,
+           s.stop_id,
+           s.the_geom
+    from septa_bus_stops as s
+    join
+    census_block_groups as c
+    on st_dwithin(ST_Transform(s.the_geom,2272),ST_Transform(c.the_geom,2272),800)
 ),
 
-stops as (
-  select st_setsrid(st_makepoint(stop_lon,stop_lat),4326)::geometry as the_geom,
-  stop_name,
-  stop_id
-  from stops_cvs
+      POP_DATA as (
+      select ss.geoid10 as geo_id,
+             ss.stop_name,
+             d.total as population,
+             ss.the_geom
+      from stops_block_800m as ss
+      join
+      census_population as d
+      on cast(ss.geoid10 as text) = substring(d.id,10)
 )
 
-select s.stop_name, s.stop_id,
- sum(p.population)as estimated_pop_800m,
- s.the_geom
-from POP_DATA as p
-join
-stops as s
-on st_dwithin(ST_Transform(s.the_geom,2272),ST_Transform(p.the_geom,2272),800)
-group by s.stop_name, s.stop_id,s.the_geom
+select stop_name,
+       sum(population)as estimated_pop_800m,
+       the_geom
+from POP_DATA
+group by stop_name, the_geom
 order by estimated_pop_800m desc
 limit 1
