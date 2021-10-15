@@ -84,13 +84,13 @@ A: "Passyunk Av & 15th St" has the largest population of 50867.
 
   **Description:**
 
-  $$Score = WheelchairDensity * WheelchairPct =\frac{N}{S} * \frac{N}{N'}$$
+  ![](https://latex.codecogs.com/svg.latex?Score%20%3D%20WheelchairDensity%20*%20WheelchairPct%20%3D%5Cfrac%7BN%7D%7BS%7D%20*%20%5Cfrac%7BN%7D%7BN%27%7D)
 
-  > $N$: Number of stops with wheelchairs boarding
+  > N: Number of stops with wheelchairs boarding
   >
-  > $N'$: Number of all stops
+  > N': Number of all stops
   >
-  > $S$: Area of the neighborhood($km^2$)
+  > S: Area of the neighborhood(km^2)
   >
   > \* Not known is considered as false.
 
