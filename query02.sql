@@ -17,6 +17,7 @@
 with septa_bus_stop_block_groups as (
     select
         s.stop_id,
+		-- Concatenate block group prefix & suffix to make proper Fkey --
         '1500000US' || bg.geoid10 as geo_id
     from septa_bus_stops as s
     join census_block_groups as bg

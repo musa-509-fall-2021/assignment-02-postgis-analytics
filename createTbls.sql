@@ -36,9 +36,28 @@ CREATE TABLE septa_bus_trips (
 	shape_id			NUMERIC
 );
 
--- Import data into bus stop table --
+-- Import data into bus trips table --
 COPY septa_bus_trips 
 FROM 'C:\Users\Public\CloudComputing_data\google_bus\trips.csv' 
+DELIMITER ',' 
+CSV HEADER;
+
+
+-- PHL Bus Routes --
+DROP TABLE IF EXISTS septa_bus_routes;
+CREATE TABLE septa_bus_routes (
+    route_id			VARCHAR,
+    route_short_name	VARCHAR, 
+	route_long_name		VARCHAR, 
+	route_type			NUMERIC,
+	route_color			VARCHAR,
+	route_text_color	VARCHAR,
+	route_url			VARCHAR
+);
+
+-- Import data into bus routes table --
+COPY septa_bus_routes 
+FROM 'C:\Users\Public\CloudComputing_data\google_bus\routes.csv' 
 DELIMITER ',' 
 CSV HEADER;
 
@@ -58,23 +77,23 @@ DELIMITER ','
 CSV HEADER;
 
 
--- Septa Bus Routes --
-DROP TABLE IF EXISTS septa_bus_routes;
-CREATE TABLE septa_bus_routes (
+-- Septa Bus shapes --
+DROP TABLE IF EXISTS septa_bus_shapes;
+CREATE TABLE septa_bus_shapes (
     shape_id			NUMERIC(7) NOT NULL,
 	shape_pt_lat		FLOAT NOT NULL,
     shape_pt_lon		FLOAT NOT NULL,
     shape_pt_sequence	NUMERIC(5)
 );
 
-COPY septa_bus_routes(shape_id, shape_pt_lat, shape_pt_lon,shape_pt_sequence) 
+COPY septa_bus_shapes(shape_id, shape_pt_lat, shape_pt_lon,shape_pt_sequence) 
 FROM 'C:\Users\Public\CloudComputing_data\google_bus\shapes.csv' 
 DELIMITER ',' 
 CSV HEADER;
 
 -- Add geometry field to bus routes data --
-ALTER TABLE septa_bus_routes ADD COLUMN the_geom geometry(Point, 4326);
-UPDATE septa_bus_routes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326);
+ALTER TABLE septa_bus_shapes ADD COLUMN the_geom geometry(Point, 4326);
+UPDATE septa_bus_shapes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326);
 
 
 -- SEPTA rail stops --

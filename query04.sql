@@ -12,7 +12,7 @@
 
 with busRouteLines as (
 	select shape_id, st_transform(st_makeline(the_geom),32129) as the_line_geom
-	from septa_bus_routes
+	from septa_bus_shapes
 	group by shape_id
 )
 
