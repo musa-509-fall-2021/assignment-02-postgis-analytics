@@ -53,6 +53,14 @@
       distance_m double precision  -- The distance apart in meters
   )
   ```
+|address|stop_name|distance_m|
+|:---:|:---:|:---:|
+|"170 SPRING LN"|"Ridge Av & Ivins Rd"|1658.7873935682778|
+|"150 SPRING LN"|"Ridge Av & Ivins Rd"|1620.287986054119|
+|"130 SPRING LN"|"Ridge Av & Ivins Rd"|1610.9941677070408|
+|"190 SPRING LN"|"Ridge Av & Ivins Rd"|1490.0758681771356|
+|"630 ST ANDREW RD"|"Germantown Av & Springfield Av"|1418.391081836291|
+|...|...|...|
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
@@ -63,12 +71,34 @@
       trip_length double precision  -- Length of the trip in meters
   )
   ```
+|trip_headsign|trip_length|
+|:---:|:---:|
+|"Bucks County Community College"|46504.13530588818|
+|null-no trip_headsign for 266697|45331.46753203432|
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
   **Description:**
+    The basic measure of accessibility is the equation  A_i= ∑ O_j  *  d_ij^(-b) (where X_y denotes that y is a subscript of X)
+    The equation describes the accessibility of an individual where the accessibility of the individual, A_i, 
+    is calculated by finding the sum of all quality opportunities (such as jobs),  
+    O_j, multiplied by the separation of those opportunities from the individual’s starting location, 
+    d_ij – which can be measured in distance, time, or a monetary cost, exponentiated by the degree to which accessibility to that opportunity declines with increasing separation.
+
+    Job opportunities will be substituted for parcels (potential dwellings) -> (O_j)
+    A rule-of-thumb used by transportation planners is that people are generally willing to walk up to 0.5 miles to access transit.
+    Since we are measuring wheelchair accessibility, we will measure the number of opportunities  within 500 feet (152.5 meters) of each wheelchair accessible bus stop -> (d_ij)
+
+    This index will be aggregated at the neighborhood level, and paired with a count of the wheelchair accessible stops in each neighborhood.
 
 6. What are the _top five_ neighborhoods according to your accessibility metric?
+|neighborhood_name|accessibility_metric|num_bus_stops_accessible|num_bus_stops_inaccessible|
+|:---:|:---:|:---:|:---:|
+|COBBS_CREEK|10282|123|10|
+|POINT_BREEZE|8943|83|0|
+|OLNEY|8960|172|0|
+|RICHMOND|8359|116|0|
+|WEST_OAK_LANE|7889|124|0|
 
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
@@ -90,6 +120,9 @@
       count_block_groups integer
   )
   ```
+|count_block_groups|
+|:---:|
+|10|
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
@@ -99,8 +132,15 @@
       geo_id text
   )
   ```
+|geo_id|
+|:---:|
+|421010369001|
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
+
+  As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+
+  **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
 
   **Structure:**
   ```sql
@@ -112,7 +152,13 @@
       stop_lat double precision
   )
   ```
+I decided to list the closest bus station to the rail station and which bus routes that station serves. This method is flawed in that 
+it accounts for multiple bus routes that service the same bus stop.
 
-  As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
-
-  **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
+|stop_id|stop_name|stop_desc|stop_lon|stop_lat|
+|:---:|:---:|:---:|:---:|:---:|
+|91004|"30th St Lower Level"|"The closest bus stop is 33rd St & Race St and is 84.56 meters away. It is serviced by the City Hall to 76th-City route."|-75.1883333|39.9591667|
+|90004|"30th Street Station"|"The closest bus stop is  and is 168.65 meters away. It is serviced by the  route."|-75.1816667|39.9566667|
+|90314|"49th Street"|"The closest bus stop is 49th St & Chester Av - FS and is 46.76 meters away. It is serviced by the 50th-Parkside to Pier 70 route."|-75.2166667|39.9436111|
+|90539|"9TH Street Lansdale"|"The closest bus stop is Broad St & Hatfield St - FS and is 259.03 meters away. It is serviced by the Telford to Montgomery Mall route."|-75.2791667|40.25|
+|90404|"Airport Terminal A"|"The closest bus stop is  and is 142.09 meters away. It is serviced by the  route."|-75.2452778|39.8761111|
