@@ -12,7 +12,7 @@
 
 -- Job opportunities will be substituted for parcels (potential dwellings) -> (O_j)
 -- A rule-of-thumb used by transportation planners is that people are generally willing to walk up to 0.5 miles to access transit.
--- Since we are measuring wheelchair accessibility, we will measure the number of opportunities  within 0.2 miles (322 meters) of each wheelchair accessible bus stop -> (d_ij)
+-- Since we are measuring wheelchair accessibility, we will measure the number of opportunities  within 500 feet (152.5 meters) of each wheelchair accessible bus stop -> (d_ij)
 
 -- This index will be aggregated at the neighborhood level, and paired with a count of the wheelchair accessible stops in each neighborhood.
 
