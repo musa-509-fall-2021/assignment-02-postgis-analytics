@@ -7,6 +7,12 @@
 --       count_block_groups integer
 --   )
 --   ```
+-- While rather arduous, I chose to identify Penn's campus through the parcel dataset.
+-- Specifically, I subsetted the data by identifying parcels owned by the university 
+-- and then further subsetted those parcels that were on streets associated with the main campus.
+-- This method does include some smaller parcels, presumably houses owned by the college.
+-- However I made the decision to include them because they were close enough to the core of campus.
+
 with upennProp as (
 	select *
 	from pwd_parcels
