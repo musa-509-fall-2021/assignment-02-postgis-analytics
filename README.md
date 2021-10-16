@@ -74,7 +74,7 @@
 |trip_headsign|trip_length|
 |:---:|:---:|
 |"Bucks County Community College"|46504.13530588818|
-|null-no trip_headsign for 266697|45331.46753203432|
+|NULL: no trip_headsign for 266697|45331.46753203432|
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
@@ -92,6 +92,7 @@
     This index will be aggregated at the neighborhood level, and paired with a count of the wheelchair accessible stops in each neighborhood.
 
 6. What are the _top five_ neighborhoods according to your accessibility metric?
+
 |neighborhood_name|accessibility_metric|num_bus_stops_accessible|num_bus_stops_inaccessible|
 |:---:|:---:|:---:|:---:|
 |COBBS_CREEK|10282|123|10|
@@ -162,3 +163,4 @@ it accounts for multiple bus routes that service the same bus stop.
 |90314|"49th Street"|"The closest bus stop is 49th St & Chester Av - FS and is 46.76 meters away. It is serviced by the 50th-Parkside to Pier 70 route."|-75.2166667|39.9436111|
 |90539|"9TH Street Lansdale"|"The closest bus stop is Broad St & Hatfield St - FS and is 259.03 meters away. It is serviced by the Telford to Montgomery Mall route."|-75.2791667|40.25|
 |90404|"Airport Terminal A"|"The closest bus stop is  and is 142.09 meters away. It is serviced by the  route."|-75.2452778|39.8761111|
+|...|...|...|...|...|
