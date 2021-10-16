@@ -73,7 +73,6 @@ rail_and_NBS as (
 	from nearestBusStop nbs
 	left join bus_routes br 
 	on nbs.bus_stop_id = br.bus_stop_id
-	order by 1
 )
 
 select rail_stop_id as stop_id, 
@@ -82,4 +81,5 @@ select rail_stop_id as stop_id,
 		stop_lon, 
 		stop_lat
 from rail_and_NBS
+order by stop_name
 
