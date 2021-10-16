@@ -1,27 +1,9 @@
 /*
   Which bus stop has the smallest population within 800 meters?
 
-  **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
-
-  ```sql
-  (
-      stop_name text, -- The name of the station
-      estimated_pop_800m integer, -- The population within 800 meters
-      the_geom geometry(Point, 4326) -- The geometry of the bus stop
-  )
-  ```
 */
 -- connect the population with groups
 
-UPDATE census_block_groups
-    set the_geom = st_setsrid(st_makepoint(intptlon10, intptlon10), 4326);
-
-UPDATE septa_bus_stops
-      set the_geom = st_setsrid(st_makepoint(stop_lon, stop_lat), 4326);
-
-create index stops__the_geom__2272__idx
-          on septa_bus_stops
-          using GiST (ST_Transform(the_geom, 2272));
 
 with stops_block_800m as (
     select c.geoid10,
@@ -50,5 +32,8 @@ select stop_name,
        the_geom
 from POP_DATA
 group by stop_name, the_geom
-order by estimated_pop_800m desc
+order by estimated_pop_800m
 limit 1
+
+/*Charter Rd& Norcom Rd
+*/
