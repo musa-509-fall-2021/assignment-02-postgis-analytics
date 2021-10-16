@@ -66,13 +66,20 @@ bus_routes as (
 	left join septa_bus_stoptimes bst on bs.bus_stop_id = bst.stop_id
 		inner join septa_bus_trips bt on bst.trip_id = bt.trip_id
 		inner join septa_bus_routes sbr on bt.route_id::varchar = sbr.route_id
+),
+rail_and_NBS as (
+	select distinct(nbs.rail_stop_id), nbs.stop_name, nbs.stop_lon, nbs.stop_lat, 
+		br.bus_stop_name, br.bus_route_name, nbs.distance_m
+	from nearestBusStop nbs
+	left join bus_routes br 
+	on nbs.bus_stop_id = br.bus_stop_id
+	order by 1
 )
 
-select distinct(nbs.rail_stop_id), nbs.stop_name, nbs.stop_lon, nbs.stop_lat, 
-	br.bus_stop_name, br.bus_route_name, nbs.distance_m
-from nearestBusStop nbs
-left join bus_routes br 
-on nbs.bus_stop_id = br.bus_stop_id
-order by 1
-
+select rail_stop_id as stop_id, 
+		stop_name, 
+		format('The closest bus stop is %s and is %s meters away. It is serviced by the %s route.',bus_stop_name, distance_m, bus_route_name) stop_desc, 
+		stop_lon, 
+		stop_lat
+from rail_and_NBS
 
