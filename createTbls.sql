@@ -104,13 +104,13 @@ UPDATE septa_bus_shapes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, sha
 -- SEPTA rail stops --
 DROP TABLE IF EXISTS septa_rail_stops;
 CREATE TABLE septa_rail_stops(
-    stop_id integer,
-    stop_name text,
-    stop_desc text,
-    stop_lat numeric,
-    stop_lon numeric,
-    zone_id text,
-    stop_url text
+    stop_id 	numeric,
+    stop_name 	text,
+    stop_desc 	text,
+    stop_lat 	numeric,
+    stop_lon 	numeric,
+    zone_id 	text,
+    stop_url 	text
 );
 
 COPY septa_rail_stops 
