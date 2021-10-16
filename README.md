@@ -112,6 +112,13 @@
     num_bus_stops_inaccessible integer
   )
   ```
+|neighborhood_name|accessibility_metric|num_bus_stops_accessible|num_bus_stops_inaccessible|
+|:---:|:---:|:---:|:---:|
+|"WEST_PARK"|0|28|0|
+|"BARTRAM_VILLAGE"|0|0|14|
+|"PENNYPACK_PARK"|0|22|0|
+|"MECHANICSVILLE"|0|0|0|
+|"WEST_TORRESDALE"|2|1|0|
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
