@@ -1,4 +1,4 @@
--- 6. What are the _top five_ neighborhoods according to your accessibility metric?
+-- 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
 --   **Both #6 and #7 should have the structure:**
 --   ```sql
@@ -84,5 +84,5 @@ select nc.name as neighborhood_name,
 from nbhdCounts nc
 full join nbhdAZpclCount nazc
 on nc.name = nazc.name
-order by accessibility_metric desc
+order by accessibility_metric asc
 limit 5;
