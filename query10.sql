@@ -21,13 +21,36 @@
 -- Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, 
 -- use `FROM (SELECT * FROM tablename limit 10) as t`.
 
+DROP INDEX IF EXISTS septa_bus_stops_the_geom_idx;
+create index septa_bus_stops_the_geom_idx
+    on septa_bus_stops
+    using GiST(st_transform(the_geom, 32129));
 
+DROP INDEX IF EXISTS septa_rail_stops_the_geom_idx;
+CREATE index septa_rail_stops_the_geom_idx
+	on septa_rail_stops
+	using GiST(st_transform(the_geom, 32129));
 
-with stopdesc as (
-	
+with rail_stops as(
+	select stop_id, stop_name, stop_lat, stop_lon, the_geom
+	from septa_rail_stops
+), 
+bus_stops as (
+	select stop_id, stop_name, the_geom
+	from septa_bus_stops
+),
+nearestBusStop as (
+	select *
+	from rail_stops rs
+	cross join lateral (
+		select stop_id, st_transform(rs.the_geom,32129) <-> st_transform(bs.the_geom,32129) as distance_m
+		from bus_stops bs
+		order by distance_m
+		limit 1
+	) closestBusStation
 )
 
-select * from septa_bus_routes
+select * 
+from nearestBusStop
 
-select stop_id, stop_name, stop_lon, stop_lat
-from septa_rail_stops
+

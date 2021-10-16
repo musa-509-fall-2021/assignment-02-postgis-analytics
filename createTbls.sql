@@ -24,6 +24,24 @@ ALTER TABLE septa_bus_stops ADD COLUMN the_geom geometry(Point, 4326);
 UPDATE septa_bus_stops SET the_geom = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat),4326);
 
 
+-- PHL Bus Stop times --
+DROP TABLE IF EXISTS septa_bus_stopTimes;
+CREATE TABLE septa_bus_stopTimes (
+	trip_id 			NUMERIC,
+	-- USE VARCHAR for times here b/c there are values >24:00:00, and idk how to ignore/fix those --
+	arrival_time		VARCHAR,
+	departure_time		VARCHAR,
+	stop_id				NUMERIC,
+	stop_sequence		NUMERIC
+);
+
+-- Import data into bus trips table --
+COPY septa_bus_stopTimes 
+FROM 'C:\Users\Public\CloudComputing_data\google_bus\stop_times.txt' 
+DELIMITER ','
+CSV HEADER;
+
+
 -- PHL Bus Trips --
 DROP TABLE IF EXISTS septa_bus_trips;
 CREATE TABLE septa_bus_trips (
@@ -63,20 +81,6 @@ CSV HEADER;
 
 
 
--- PHL Census Block Group Population join w/ census_block_groups_2010 --
-DROP TABLE IF EXISTS population;
-CREATE TABLE population (
-    id		VARCHAR(23) PRIMARY KEY NOT NULL,
-    name	VARCHAR(75) NOT NULL, 
-	total	NUMERIC(7) NOT NULL
-);
-
-COPY population(id, name, total) 
-FROM 'C:\Users\Public\CloudComputing_data\PHL_2010_blockGroupPopulation\phl_2010_blockGroup_population.csv' 
-DELIMITER ',' 
-CSV HEADER;
-
-
 -- Septa Bus shapes --
 DROP TABLE IF EXISTS septa_bus_shapes;
 CREATE TABLE septa_bus_shapes (
@@ -94,6 +98,7 @@ CSV HEADER;
 -- Add geometry field to bus routes data --
 ALTER TABLE septa_bus_shapes ADD COLUMN the_geom geometry(Point, 4326);
 UPDATE septa_bus_shapes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326);
+
 
 
 -- SEPTA rail stops --
@@ -119,7 +124,18 @@ UPDATE septa_rail_stops SET the_geom = ST_SetSRID(ST_MakePoint(stop_lon, stop_la
 
 
 
+-- PHL Census Block Group Population join w/ census_block_groups_2010 --
+DROP TABLE IF EXISTS population;
+CREATE TABLE population (
+    id		VARCHAR(23) PRIMARY KEY NOT NULL,
+    name	VARCHAR(75) NOT NULL, 
+	total	NUMERIC(7) NOT NULL
+);
 
+COPY population(id, name, total) 
+FROM 'C:\Users\Public\CloudComputing_data\PHL_2010_blockGroupPopulation\phl_2010_blockGroup_population.csv' 
+DELIMITER ',' 
+CSV HEADER;
 
 
 -- Edit block group shp geom column name & set its crs --
