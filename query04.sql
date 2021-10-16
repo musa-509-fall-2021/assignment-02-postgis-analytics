@@ -11,12 +11,14 @@
 --   ```
 
 with busRouteLines as (
-	select shape_id::text as trip_headsign, st_transform(st_makeline(the_geom),32129) as the_line_geom
+	select shape_id, st_transform(st_makeline(the_geom),32129) as the_line_geom
 	from septa_bus_routes
 	group by shape_id
 )
 
-select r.trip_headsign, st_length(r.the_line_geom) as trip_length
+select distinct(t.trip_headsign) as trip_headsign, st_length(r.the_line_geom) as trip_length
 from busRouteLines r
+left join septa_bus_trips t
+on r.shape_id = t.shape_id
 order by trip_length desc
 limit 2;

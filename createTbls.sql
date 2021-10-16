@@ -24,6 +24,24 @@ ALTER TABLE septa_bus_stops ADD COLUMN the_geom geometry(Point, 4326);
 UPDATE septa_bus_stops SET the_geom = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat),4326);
 
 
+-- PHL Bus Trips --
+DROP TABLE IF EXISTS septa_bus_trips;
+CREATE TABLE septa_bus_trips (
+    route_id			NUMERIC,
+    service_id			NUMERIC,
+	trip_id				NUMERIC PRIMARY KEY NOT NULL,   
+	trip_headsign		VARCHAR(65) NOT NULL, 
+	block_id			NUMERIC,
+	direction_id		NUMERIC,
+	shape_id			NUMERIC
+);
+
+-- Import data into bus stop table --
+COPY septa_bus_trips 
+FROM 'C:\Users\Public\CloudComputing_data\google_bus\trips.csv' 
+DELIMITER ',' 
+CSV HEADER;
+
 
 
 -- PHL Census Block Group Population join w/ census_block_groups_2010 --
@@ -42,7 +60,6 @@ CSV HEADER;
 
 -- Septa Bus Routes --
 DROP TABLE IF EXISTS septa_bus_routes;
-
 CREATE TABLE septa_bus_routes (
     shape_id			NUMERIC(7) NOT NULL,
 	shape_pt_lat		FLOAT NOT NULL,
@@ -60,6 +77,31 @@ ALTER TABLE septa_bus_routes ADD COLUMN the_geom geometry(Point, 4326);
 UPDATE septa_bus_routes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326);
 
 
+-- SEPTA rail stops --
+DROP TABLE IF EXISTS septa_rail_stops;
+CREATE TABLE septa_rail_stops(
+    stop_id integer,
+    stop_name text,
+    stop_desc text,
+    stop_lat numeric,
+    stop_lon numeric,
+    zone_id text,
+    stop_url text
+);
+
+COPY septa_rail_stops 
+FROM 'C:\Users\Public\CloudComputing_data\google_rail\stops.csv' 
+DELIMITER ',' 
+CSV HEADER;
+
+-- Add geometry field to bus routes data --
+ALTER TABLE septa_rail_stops ADD COLUMN the_geom geometry(Point, 4326);
+UPDATE septa_rail_stops SET the_geom = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat),4326);
+
+
+
+
+
 
 -- Edit block group shp geom column name & set its crs --
 -- ALTER TABLE census_block_groups RENAME COLUMN geom TO the_geom;
@@ -67,7 +109,7 @@ UPDATE septa_bus_routes SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, sha
 
 -- Edit parcels shp geom column name & set its crs --
 -- ALTER TABLE pwd_parcels RENAME COLUMN geom TO the_geom;
---UPDATE pwd_parcels SET the_geom = ST_Transform(ST_SetSRID(the_geom, 4326),32129);
+-- UPDATE pwd_parcels SET the_geom = ST_Transform(ST_SetSRID(the_geom, 4326),32129);
 
 
 --ALTER TABLE neighborhoods_philadelphia RENAME COLUMN geom to the_geom;
