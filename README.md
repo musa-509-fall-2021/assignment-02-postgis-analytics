@@ -119,6 +119,12 @@ Because the query, for an unknown reason, returns no data, the following is a ve
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
+**Stop Description:**
+Distance to nearest Wawa
+
+**Explanation:**
+Perform a lateral join between septa_rail_stops and Wawa locations dataset (available online and uploaded to this repo) to determine the distance from each rail stop to the nearest Wawa location.
+
   **Structure:**
   ```sql
   (
