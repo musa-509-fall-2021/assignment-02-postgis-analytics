@@ -104,6 +104,8 @@ Because the query, for an unknown reason, returns no data, the following is a ve
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
+**Answer:** 421010369001
+
 **Explanation:** 
 1. Perform a spatial join, using "ON ST_Contains" of Penn's campus dataset and Census block groups dataset.
 2. Identify geoid using two WHERE conditions: (1) owner is 'TRUSTEES OF THE UNIVERSIT' and (2) address is 3400-04 Walnut Street (i.e. address of Weitzman School in orientation to Walnut).
