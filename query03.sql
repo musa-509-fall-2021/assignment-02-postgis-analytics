@@ -13,7 +13,7 @@ select address,
 from phl_pwd_parcels p
     cross join lateral (
         select stop_name,
-        p.geom<-> b.the_geomgeo distance_m
+        p.geom<-> b.the_geom distance_m
         from septa_bus_stops b
         order by distance_m
         limit 1
