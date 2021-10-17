@@ -24,7 +24,11 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+**ANSWER:** Passyunk Av & 15th St has the largest population, with 50867 people in total.
+
 2. Which bus stop has the smallest population within 800 meters?
+
+**ANSWER:** Charter Rd & Norcom Rd has the smallest population with only 2.
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
 
@@ -49,6 +53,8 @@
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
+**ANSWER:** The trip headsign of two routes with the longest trips are 201007 and 007201 and the trip length are both 66568.43m.
+
   **Structure:**
   ```sql
   (
@@ -59,11 +65,37 @@
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
-  **Description:**
+**Description:**
+
+I calculated the accessibility by divding the sum of bus stops where wheelchair_boarding = 1 (also defined as accessible bus stops) by the county area size.
 
 6. What are the _top five_ neighborhoods according to your accessibility metric?
 
+**ANSWER:** top five neighborhoods are: 
+
+1.WASHINGTON_SQUARE 
+
+2.NEWBOLD
+
+3.SPRING_GARDEN
+
+4.HAWTHORNE
+
+5. FRANCISVILLE
+
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
+
+**ANSWER:** bottom five neighborhoods are: 
+
+1.BARIRAM_VILLAGE
+
+2.PORT_RICHMOND
+
+3.WEST_TORRESDALE
+
+4.NAVY_YARD
+
+5.AIRPORT
 
   **Both #6 and #7 should have the structure:**
   ```sql
@@ -77,6 +109,9 @@
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
+**ANSWER:**I choose Philadelphia Universities and Colleges (shp) from OpenDataPhilly and set 50m buffer around UPenn. 
+There is one census block groups Penn's main campus fully contains.
+
   **Structure (should be a single value):**
   ```sql
   (
@@ -85,6 +120,9 @@
   ```
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
+
+**ANSWER:** The geo_id of the block group that contains Meyerson Hall is "421010369001". 
+I defined the address of Meyerson Hall as 3400-04 WALNUT ST in phl_pwd_parcels.
 
   **Structure (should be a single value):**
   ```sql
@@ -107,5 +145,7 @@
   ```
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+  
+  Here I choose universities from Q8 and add the description.
 
   **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
