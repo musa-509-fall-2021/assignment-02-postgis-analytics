@@ -5,6 +5,7 @@
 */
 
 
+
 alter table septa_bus_stops
     add column if not exists the_geom geometry(Point, 4326);
 
