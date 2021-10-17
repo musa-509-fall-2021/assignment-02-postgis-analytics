@@ -24,7 +24,11 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+**Answer:** Passyunk Av & 15th St
+
 2. Which bus stop has the smallest population within 800 meters?
+
+**Answer:** Charter Rd & Norcom Rd
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
 
