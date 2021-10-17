@@ -145,5 +145,7 @@ I defined the address of Meyerson Hall as 3400-04 WALNUT ST in phl_pwd_parcels.
   ```
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+  
+  Here I choose universities from Q8 and add the description.
 
   **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
