@@ -1,3 +1,8 @@
+/*
+Which bus stop has the smallest population within 800 meters?
+*/
+
+
 create index if not exists septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
     using GiST (ST_Transform(the_geom, 32129));
@@ -30,5 +35,5 @@ select
     the_geom
 from septa_bus_stop_surrounding_population
 join septa_bus_stops using (stop_id)
-order by estimated_pop_800m desc
+order by estimated_pop_800m asc
 limit 1
