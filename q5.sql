@@ -14,12 +14,12 @@ with bus_stops_accessible as (
 		
 	 bus_access as(
 	    select name as neighborhood_name,
-               count(*) filter(where wheelchair_boarding = 1) as accessible,
-			   count(*) filter(where wheelchair_boarding = 2) as nonaccessible,
+               count(*) filter(where wheelchair_boarding = 1) as num_bus_stops_accessible,
+			   count(*) filter(where wheelchair_boarding = 2) as num_bus_stops_inaccessible,
 			   area_size
 		  from bus_neighbors
 		  group by neighborhood_name, area_size)
 		
-select neighborhood_name, accessible, nonaccessible,
-       accessible/area_size as accessibility_metric
+select neighborhood_name, num_bus_stops_accessible, num_bus_stops_inaccessible,
+       num_bus_stops_accessible/area_size as accessibility_metric
 	   from bus_access
