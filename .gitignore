@@ -1,0 +1,4 @@
+.vscode
+.DS_Store
+data/gtfs_public/google_bus/*.*
+data/gtfs_public/google_rail/*.*

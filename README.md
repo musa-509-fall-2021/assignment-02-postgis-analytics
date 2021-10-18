@@ -1,5 +1,7 @@
 # Assignment 02: PostGIS Analytics
 
+My solutions are in the comments of each query.
+
 **Due: Oct 11, 2021 by 11:59pm ET**
 
 ## Submission Instructions
