@@ -37,5 +37,5 @@ select
     st_transform(geometry,32129) as geometry
 from septa_bus_stop_surrounding_population
 join septa_bus_stops using (stop_id)
-order by estimated_pop_800m desc
+order by estimated_pop_800m asc
 limit 1;
