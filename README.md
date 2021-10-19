@@ -23,6 +23,17 @@
 ## Questions
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
+Answer:
+```sql
+	
+stop_name
+text
+estimated_pop_800m
+bigint
+geometry
+geometry
+1	Passyunk Av & 15th St	101734	0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340
+```
 
 2. Which bus stop has the smallest population within 800 meters?
 
