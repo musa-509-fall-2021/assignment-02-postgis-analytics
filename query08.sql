@@ -39,13 +39,10 @@ with upennProp as (
 ), upennGeneralizedCampus as (
 	select st_ConvexHull(st_union(up.the_geom)) as the_geom
 	from upennProp up
-), campusDividedBG as (
-	select bg.geoid10, st_intersection(bg.the_geom, upgc.the_geom) as the_geom
-	from census_block_groups bg, upennGeneralizedCampus upgc
 )
 
 select count(distinct(bg.the_geom)) as count_block_groups
-from census_block_groups bg
-join campusDividedBG cdbg
-on st_contains(bg.the_geom, cdbg.the_geom)
+from upennGeneralizedCampus upgc
+join census_block_groups bg
+on st_contains(upgc.the_geom, bg.the_geom)
 
