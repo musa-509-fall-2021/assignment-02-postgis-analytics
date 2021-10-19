@@ -24,86 +24,153 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+Passyunk & 15th Ave
+
+with septa_bus_stop_block_groups as (
+   select
+       s.stop_id,
+       '1500000US' || bg.geoid10 as geo_id
+   from septa_bus_stops as s
+   join census_block_groups_2010 as bg
+       on ST_DWithin(
+           ST_Transform(s.geom, 32129),
+           ST_Transform(bg.geom, 32129),
+           800
+       )
+),
+
+septa_bus_stop_surrounding_population as (
+
+   select
+       stop_id,
+       sum(p001001) as estimated_pop_800m
+   from septa_bus_stop_block_groups as s
+   join census_population as p using (geo_id)
+   group by stop_id
+)
+
+select
+   stop_name,
+   estimated_pop_800m,
+   geom
+from septa_bus_stop_surrounding_population
+join septa_bus_stops using (stop_id)
+order by estimated_pop_800m desc
+limit 1;
+
 2. Which bus stop has the smallest population within 800 meters?
 
-  **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
+Charter & Norcom
 
-  ```sql
-  (
-      stop_name text, -- The name of the station
-      estimated_pop_800m integer, -- The population within 800 meters
-      the_geom geometry(Point, 4326) -- The geometry of the bus stop
-  )
-  ```
+with septa_bus_stop_block_groups as (
+   select
+       s.stop_id,
+       '1500000US' || bg.geoid10 as geo_id
+   from septa_bus_stops as s
+   join census_block_groups_2010 as bg
+       on ST_DWithin(
+           ST_Transform(s.geom, 32129),
+           ST_Transform(bg.geom, 32129),
+           800
+       )
+),
+
+septa_bus_stop_surrounding_population as (
+
+   select
+       stop_id,
+       sum(p001001) as estimated_pop_800m
+   from septa_bus_stop_block_groups as s
+   join census_population as p using (geo_id)
+   group by stop_id
+)
+
+select
+   stop_name,
+   estimated_pop_800m,
+   geom
+from septa_bus_stop_surrounding_population
+join septa_bus_stops using (stop_id)
+order by estimated_pop_800m asc
+limit 1;
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
-  **Structure:**
-  ```sql
-  (
-      address text,  -- The address of the parcel
-      stop_name text,  -- The name of the bus stop
-      distance_m double precision  -- The distance apart in meters
-  )
-  ```
+Logic:
+- This one I'm less clear on, but would be most inclied to start by making centroids of each parcel
+- Next, I would see if a nearest neighbor function exists in SQL to join the centroid to its nearest neighbor
+- I would want my query to select the parcel address, bus stop name, and distance apart in meters and be in descending order
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
-  **Structure:**
-  ```sql
-  (
-      trip_headsign text,  -- Headsign of the trip
-      trip_length double precision  -- Length of the trip in meters
-  )
-  ```
+ Logic:
+ - First would use ST_Makeline to make lines based off of the endpoints of the route
+ - Next I would measure the length of those lines
+ - Finally, I would sort the resulting list in descending orden and limit by two 
 
-5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
+**5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
+
+SELECT
+  count(*) AS stop_count,
+  count(*) filter(where stops.wheelchair_boarding = 1) AS accessible_stops,
+  neighborhoods.name AS neighborhood_name
+FROM neighborhoods_philadelphia AS neighborhoods
+LEFT JOIN septa_bus_stops AS stops
+ON ST_Contains(ST_Transform(ST_Setsrid(neighborhoods.geom, 2272), 4326), stops.geom)
+GROUP BY neighborhood_name
+ORDER BY accessible_stops desc;
 
   **Description:**
 
-6. What are the _top five_ neighborhoods according to your accessibility metric?
+**6. What are the _top five_ neighborhoods according to your accessibility metric?
 
-7. What are the _bottom five_ neighborhoods according to your accessibility metric?
+SELECT
+  count(*) AS stop_count,
+  count(*) filter(where stops.wheelchair_boarding = 1) AS accessible_stops,
+  neighborhoods.name AS neighborhood_name
+FROM neighborhoods_philadelphia AS neighborhoods
+LEFT JOIN septa_bus_stops AS stops
+ON ST_Contains(ST_Transform(ST_Setsrid(neighborhoods.geom, 2272), 4326), stops.geom)
+GROUP BY neighborhood_name
+ORDER BY accessible_stops desc
+LIMIT 5;
 
-  **Both #6 and #7 should have the structure:**
-  ```sql
-  (
-    neighborhood_name text,  -- The name of the neighborhood
-    accessibility_metric ...,  -- Your accessibility metric value
-    num_bus_stops_accessible integer,
-    num_bus_stops_inaccessible integer
-  )
-  ```
+**7. What are the _bottom five_ neighborhoods according to your accessibility metric?
+
+SELECT
+  count(*) AS stop_count,
+  count(*) filter(where stops.wheelchair_boarding = 1) AS accessible_stops,
+  neighborhoods.name AS neighborhood_name
+FROM neighborhoods_philadelphia AS neighborhoods
+LEFT JOIN septa_bus_stops AS stops
+ON ST_Contains(ST_Transform(ST_Setsrid(neighborhoods.geom, 2272), 4326), stops.geom)
+GROUP BY neighborhood_name
+ORDER BY accessible_stops asc
+LIMIT 5;
+
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
-  **Structure (should be a single value):**
-  ```sql
-  (
-      count_block_groups integer
-  )
+Logic:
+- First would use parcel data to define Penn's campus via ownership 
+- Next, would use ST_Contains to determine how many of the block groups are within the areas defined as campus
+- Finally I would want my select statement to count * (and would possibly need to GROUP BY ownership so that the count works)
   ```
 
-9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
+**9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
-  **Structure (should be a single value):**
-  ```sql
-  (
-      geo_id text
-  )
+SELECT p.address, bg.geoid10
+FROM pwd_parcels AS p
+JOIN census_block_groups_2010 AS bg
+ON ST_Contains(bg.geom, ST_SetSRID(p.geom, 4326))
+WHERE p.address = '220-30 S 34TH ST';
+
+421010369001
   ```
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
-  **Structure:**
-  ```sql
-  (
-      stop_id integer,
-      stop_name text,
-      stop_desc text,
-      stop_lon double precision,
-      stop_lat double precision
-  )
+
   ```
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
