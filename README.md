@@ -25,9 +25,7 @@
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.  
   
 **Answer:**  
-top_name		             estimated_pop_800m	 geometry  
-Passyunk Av & 15th St	 101734			           0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340
-
+![image](https://user-images.githubusercontent.com/90301308/137847250-0ef8a233-fc9a-43e8-9b9a-783186183df6.png)
 
 
 2. Which bus stop has the smallest population within 800 meters?
@@ -42,9 +40,8 @@ Passyunk Av & 15th St	 101734			           0101000020E6100000B1C398F4F7CA52C0D08
   )
   ```
     
-**Answer:**  
-stop_name		             estimated_pop_800m	 geometry  
-Charter Rd & Norcom Rd	 4			                0101000020E6100000C896E5EB32C052C0DF3312A1110C4440
+**Answer:**   
+![image](https://user-images.githubusercontent.com/90301308/137847325-83ba70d4-4ff9-4bd8-b9f3-9471ea4db346.png)
 
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
@@ -72,10 +69,9 @@ Charter Rd & Norcom Rd	 4			                0101000020E6100000C896E5EB32C052C0DF
   )
   ```
     
-**Answer:**  
-trip_headsign			                trip_length  
-69th Street Transportation Ctr	 4858635.933364232  
-Frankford Transportation Center	4389701.855966304
+**Answer:**   
+![image](https://user-images.githubusercontent.com/90301308/137847829-744b05c6-6cf0-4165-8341-bbcf9c908865.png)
+
 
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
@@ -86,8 +82,8 @@ Frankford Transportation Center	4389701.855966304
   
 6. What are the _top five_ neighborhoods according to your accessibility metric?  
   
-**Answer**  
-
+**Answer**   
+![image](https://user-images.githubusercontent.com/90301308/137847103-f8e9af20-95f0-49e6-b8c8-55dbffea729e.png)
 
 
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
@@ -102,8 +98,8 @@ Frankford Transportation Center	4389701.855966304
   )
   ```
     
-**Answer**  
-
+**Answer**   
+![image](https://user-images.githubusercontent.com/90301308/137847148-0d2ca8e4-e6ed-4885-970d-44a5b77fb772.png)
 
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
@@ -114,10 +110,15 @@ Frankford Transportation Center	4389701.855966304
       count_block_groups integer
   )
   ```
-    
-**Answer**  
-count_block_groups  
-10  
+
+**Description:**  
+  I downloaded universities_colleges (GeoJSON) from OpenDataPhilly, which contains all the buildings belonging to universities in Philly. The URL is https://opendata.arcgis.com/api/v3/datasets/8ad76bc179cf44bd9b1c23d6f66f57d1_0/downloads/data?format=geojson&spatialRefId=4326
+  
+  
+  
+**Answer:**   
+count_block_groups   
+10   
 
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
@@ -129,9 +130,9 @@ count_block_groups
   )
   ```
     
-**Answer**  
-geo_id  
-421010369001
+**Answer:**   
+geo_id   
+421010369001  
 
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
