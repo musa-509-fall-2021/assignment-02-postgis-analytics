@@ -23,17 +23,11 @@
 ## Questions
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
-Answer:
-```sql
-	
-stop_name
-text
-estimated_pop_800m
-bigint
-geometry
-geometry
-1	Passyunk Av & 15th St	101734	0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340
-```
+**Answer**
+top_name		estimated_pop_800m	geometry
+Passyunk Av & 15th St	101734			0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340
+
+
 
 2. Which bus stop has the smallest population within 800 meters?
 
@@ -46,6 +40,10 @@ geometry
       the_geom geometry(Point, 4326) -- The geometry of the bus stop
   )
   ```
+**Answer**
+stop_name		estimated_pop_800m	geometry
+Charter Rd & Norcom Rd	4			0101000020E6100000C896E5EB32C052C0DF3312A1110C4440
+
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
@@ -57,6 +55,9 @@ geometry
       distance_m double precision  -- The distance apart in meters
   )
   ```
+**Answer**
+
+
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
@@ -67,12 +68,22 @@ geometry
       trip_length double precision  -- Length of the trip in meters
   )
   ```
+**Answer**
+trip_headsign			trip_length
+69th Street Transportation Ctr	4858635.933364232
+Frankford Transportation Center	4389701.855966304
+
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
   **Description:**
-
+  First, I define that any stops intersecting neighborhoods' 500m buffer will be considered as amenities to that neighborhood. Then rate accessibility by the wheelchair-friendly stop percentage, which is the amount of stops with wheelchair boarding in that neighborhood devided by the amount of all stops contributing to that neighborhood. When the the first metric, wheelchair-friendly stop percentage, is the same, I will apply the amount of stops with wheelchair boarding in that neighborhood as the second metric.
+  
+  
 6. What are the _top five_ neighborhoods according to your accessibility metric?
+**Answer**
+
+
 
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
 
@@ -85,6 +96,9 @@ geometry
     num_bus_stops_inaccessible integer
   )
   ```
+**Answer**
+
+
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
@@ -94,6 +108,10 @@ geometry
       count_block_groups integer
   )
   ```
+**Answer**
+count_block_groups
+10
+
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
@@ -103,6 +121,10 @@ geometry
       geo_id text
   )
   ```
+**Answer**
+geo_id
+421010369001
+
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
@@ -116,6 +138,10 @@ geometry
       stop_lat double precision
   )
   ```
+**Answer**
+![image](https://user-images.githubusercontent.com/90301308/137842845-51dfe359-1c53-4287-af6d-2c611109cec9.png)
+
+
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
 
