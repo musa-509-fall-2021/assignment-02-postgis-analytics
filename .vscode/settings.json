@@ -1,0 +1,17 @@
+{
+    "jupyter.jupyterServerType": "remote",
+    "sqltools.connections": [
+
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 6822,
+            "driver": "PostgreSQL",
+            "username": "postgres",
+            "password": "ACMPP_dno-219p",
+            "database": "MUSA-509",
+            "name": "local_MUSA-509"
+        }
+    ],
+    "sqltools.flattenGroupsIfOne": true
+}
