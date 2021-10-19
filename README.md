@@ -22,13 +22,14 @@
 
 ## Questions
 
-1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
+[1. Which bus stop has the largest population within 800 meters?](query01.sql)
+As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
 |stop_name|Population|the_geom|
 |:---:|:---:|:---:|
 |"Passyunk Av & 15th St"|50867|"0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340"|
 
-2. Which bus stop has the smallest population within 800 meters?
+[2. Which bus stop has the smallest population within 800 meters?](query02.sql)
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
 
@@ -43,7 +44,8 @@
 |:---:|:---:|:---:|
 |"Charter Rd & Norcom Rd"|2|"0101000020E6100000C896E5EB32C052C0DF3312A1110C4440"|
 
-3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
+[3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters.](query0.sql)
+Order by distance (largest on top).
 
   **Structure:**
   ```sql
@@ -62,7 +64,8 @@
 |"630 ST ANDREW RD"|"Germantown Av & Springfield Av"|1418.391081836291|
 |...|...|...|
 
-4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
+[4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips.](query04.sql)
+In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
   **Structure:**
   ```sql
@@ -76,7 +79,8 @@
 |"Bucks County Community College"|46504.13530588818|
 |NULL: no trip_headsign for 266697|45331.46753203432|
 
-5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
+[5. Rate neighborhoods by their bus stop accessibility for wheelchairs.](query05.sql)
+Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
   **Description:**
     The basic measure of accessibility is the equation  A_i= ∑ O_j  *  d_ij^(-b) (where X_y denotes that y is a subscript of X)
@@ -91,8 +95,8 @@
 
     This index will be aggregated at the neighborhood level, and paired with a count of the wheelchair accessible stops in each neighborhood.
 
-6. What are the _top five_ neighborhoods according to your accessibility metric?
-
+[6. What are the _top five_ neighborhoods according to your accessibility metric?](query06.sql)
+[Screenshot of answer - queries take 45 minutes to run](A2_Q6_queryResults.PNG)
 |neighborhood_name|accessibility_metric|num_bus_stops_accessible|num_bus_stops_inaccessible|
 |:---:|:---:|:---:|:---:|
 |COBBS_CREEK|10282|123|10|
@@ -101,8 +105,8 @@
 |RICHMOND|8359|116|0|
 |WEST_OAK_LANE|7889|124|0|
 
-7. What are the _bottom five_ neighborhoods according to your accessibility metric?
-
+[7. What are the _bottom five_ neighborhoods according to your accessibility metric?](query07.sql)
+[Screenshot of answer - queries take 45 minutes to run](A2_Q7_results.PNG)
   **Both #6 and #7 should have the structure:**
   ```sql
   (
@@ -120,7 +124,8 @@
 |"MECHANICSVILLE"|0|0|0|
 |"WEST_TORRESDALE"|2|1|0|
 
-8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
+[8. With a query, find out how many census block groups Penn's main campus fully contains.](query08.sql)
+Discuss which dataset you chose for defining Penn's campus.
 
   **Structure (should be a single value):**
   ```sql
@@ -132,7 +137,8 @@
 |:---:|
 |1|
 
-9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
+[9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall.](query09.sql) 
+ ST_MakePoint() and functions like that are not allowed.
 
   **Structure (should be a single value):**
   ```sql
@@ -144,11 +150,10 @@
 |:---:|
 |421010369001|
 
-10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
-
-  As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
-
-  **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
+[10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed.](query10.sql) 
+ Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
+ As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
+ **Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
 
   **Structure:**
   ```sql
