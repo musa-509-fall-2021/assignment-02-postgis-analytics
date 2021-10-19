@@ -59,12 +59,12 @@ from stop_infos
 
 /*
 returned with 
-stop_id stop_name stop_desc
+  stop_id     stop_name                           stop_desc
 1 39	"20th St & Johnston St "	"You can find stop #39 a distance of 1035.48 meters to the south-west of 2301 S BROAD ST"
-2 40	"20th St & Johnston St"	"You can find stop #40 a distance of 1029.98 meters to the south-west of 2301 S BROAD ST"
-3 41	"16th St & Snyder Av"	"You can find stop #41 a distance of 413.02 meters to the south-east of 2301 S BROAD ST"
+2 40	"20th St & Johnston St"	        "You can find stop #40 a distance of 1029.98 meters to the south-west of 2301 S BROAD ST"
+3 41	"16th St & Snyder Av"	        "You can find stop #41 a distance of 413.02 meters to the south-east of 2301 S BROAD ST"
 4 42	"16th St & Washington Av"	"You can find stop #42 a distance of 352.40 meters to the south-east of 1212-14 S BROAD ST"
-5 43	"16th St & Pine St "	"You can find stop #43 a distance of 109.42 meters to the south of 1500-02 PINE ST"
+5 43	"16th St & Pine St "	        "You can find stop #43 a distance of 109.42 meters to the south of 1500-02 PINE ST"
 6 ...
 ...
 */
