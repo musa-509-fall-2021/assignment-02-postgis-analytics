@@ -17,45 +17,24 @@ create index if not exists septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
     using GiST (ST_Transform(geometry, 32129));
 
-create index if not exists phl_pwd_parcels_geometry_32129_idx
+create index if not exists phl_pwd_parcels_geometry__32129__idx
     on phl_pwd_parcels
     using GiST (ST_Transform(geometry, 32129));
 
--- create subquery of closest bus stop of each parcel
-with phl_pwd_parcels_closest_distance as(
-    SELECT
-        p.address,
-        min(
-            ST_Distance(
-                ST_Transform(p.geometry, 32129),
-                ST_Transform(s.geometry, 32129)
-            )
-        )as distance_m
-    FROM phl_pwd_parcels as p
-    CROSS JOIN septa_bus_stops as s
-    GROUP BY p.address
-),
--- create subquery of distance between each bus stop and each parcel
-phl_pwd_parcels_distance as(
-    SELECT
-        p.address,
+-- query with lateral cross join
+SELECT 
+    p.address,
+    cl.stop_name,
+    cl.distance_m
+from phl_pwd_parcels as p
+cross join lateral(
+    select 
         s.stop_name,
         ST_Distance(
             ST_Transform(p.geometry, 32129),
             ST_Transform(s.geometry, 32129)
         )as distance_m
-    FROM phl_pwd_parcels as p
-    CROSS JOIN septa_bus_stops as s
-)
--- final result combining stop names to addresses with closest distance
-select distinct
-    cd.address,
-    d.stop_name,
-    cd.distance_m
-from
-    phl_pwd_parcels_distance as d
-JOIN
-    phl_pwd_parcels_closest_distance as cd
-ON d.distance_m = cd.distance_m;
-
-
+    from septa_bus_stops as s
+    order by distance_m desc
+    limit 1
+) as cl;

@@ -4,7 +4,7 @@
   of the 800 meter buffer.
 */
 
--- create a geometry column with longitude and latitude
+-- create a geometry column with longitude and latitude for septa_bus_stops
 alter table septa_bus_stops
     add column if not exists geometry geometry(Point, 4326);
 
@@ -16,7 +16,7 @@ create index if not exists septa_bus_stops__the_geom__32129__idx
     on septa_bus_stops
     using GiST (ST_Transform(geometry, 32129));
 
--- query
+-- combine bus stops with its block groups
 with septa_bus_stop_block_groups as (
     select
         s.stop_id,
@@ -29,7 +29,7 @@ with septa_bus_stop_block_groups as (
             800
         )
 ),
-
+-- sum surrounding population of each bus stop
 septa_bus_stop_surrounding_population as (
     select
         stop_id,
@@ -38,10 +38,10 @@ septa_bus_stop_surrounding_population as (
     join census_population as p using (id)
     group by stop_id
 )
-
+-- select the bus stop with largest population and output
 select
     stop_name,
-    estimated_pop_800m,
+    estimated_pop_800m::integer,
     geometry
 from septa_bus_stop_surrounding_population
 join septa_bus_stops using (stop_id)
