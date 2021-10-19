@@ -22,10 +22,11 @@
 
 ## Questions
 
-1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
-**Answer**
-  top_name		estimated_pop_800m	geometry
-  Passyunk Av & 15th St	101734			0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340
+1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.  
+  
+**Answer:**  
+top_name		             estimated_pop_800m	 geometry  
+Passyunk Av & 15th St	 101734			           0101000020E6100000B1C398F4F7CA52C0D0807A336AF64340
 
 
 
@@ -40,9 +41,10 @@
       the_geom geometry(Point, 4326) -- The geometry of the bus stop
   )
   ```
-**Answer**
-stop_name		estimated_pop_800m	geometry
-Charter Rd & Norcom Rd	4			0101000020E6100000C896E5EB32C052C0DF3312A1110C4440
+    
+**Answer:**  
+stop_name		             estimated_pop_800m	 geometry  
+Charter Rd & Norcom Rd	 4			                0101000020E6100000C896E5EB32C052C0DF3312A1110C4440
 
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
@@ -55,7 +57,8 @@ Charter Rd & Norcom Rd	4			0101000020E6100000C896E5EB32C052C0DF3312A1110C4440
       distance_m double precision  -- The distance apart in meters
   )
   ```
-**Answer**
+    
+**Answer**  
 
 
 
@@ -68,20 +71,22 @@ Charter Rd & Norcom Rd	4			0101000020E6100000C896E5EB32C052C0DF3312A1110C4440
       trip_length double precision  -- Length of the trip in meters
   )
   ```
-**Answer**
-trip_headsign			trip_length
-69th Street Transportation Ctr	4858635.933364232
+    
+**Answer:**  
+trip_headsign			                trip_length  
+69th Street Transportation Ctr	 4858635.933364232  
 Frankford Transportation Center	4389701.855966304
 
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
-  **Description:**
+  **Description:**  
   First, I define that any stops intersecting neighborhoods' 500m buffer will be considered as amenities to that neighborhood. Then rate accessibility by the wheelchair-friendly stop percentage, which is the amount of stops with wheelchair boarding in that neighborhood devided by the amount of all stops contributing to that neighborhood. When the the first metric, wheelchair-friendly stop percentage, is the same, I will apply the amount of stops with wheelchair boarding in that neighborhood as the second metric.
   
   
-6. What are the _top five_ neighborhoods according to your accessibility metric?
-**Answer**
+6. What are the _top five_ neighborhoods according to your accessibility metric?  
+  
+**Answer**  
 
 
 
@@ -96,7 +101,8 @@ Frankford Transportation Center	4389701.855966304
     num_bus_stops_inaccessible integer
   )
   ```
-**Answer**
+    
+**Answer**  
 
 
 
@@ -108,9 +114,10 @@ Frankford Transportation Center	4389701.855966304
       count_block_groups integer
   )
   ```
-**Answer**
-count_block_groups
-10
+    
+**Answer**  
+count_block_groups  
+10  
 
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
@@ -121,8 +128,9 @@ count_block_groups
       geo_id text
   )
   ```
-**Answer**
-geo_id
+    
+**Answer**  
+geo_id  
 421010369001
 
 
@@ -138,7 +146,8 @@ geo_id
       stop_lat double precision
   )
   ```
-**Answer**
+    
+**Answer**  
 ![image](https://user-images.githubusercontent.com/90301308/137842845-51dfe359-1c53-4287-af6d-2c611109cec9.png)
 
 
