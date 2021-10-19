@@ -49,9 +49,8 @@ an accessibility metric that aggregated point ratings of three metrics:
 
 The three metrics rate the accessibility of immediate bus stops and
 the transit system at large. However, only on a surface level and there is a bias towards higher density areas 
-(without considering the networks of the bus lines, transit system, and walking paths)
+(without considering the networks of the bus lines, transit system, and walking paths). See my query for a in-depth discussion
 
-See this map of the bus stop metrics
 ![PHL Wheelchair Accessibility Metrics of Bus Stops](PHL_Wheelchair_Accessibility_Bus_Stops.jpg)
 
 6. What are the _top five_ neighborhoods according to your accessibility metric?
@@ -80,6 +79,8 @@ See this map of the bus stop metrics
 |------------------------------|
 |36                            |
 
+I used OpenDataPhilly's college & university dataset (which is just the Parcel dataset with labels). See my query for a in-depth discussion
+
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
 |geo_id                        |
@@ -96,3 +97,4 @@ See this map of the bus stop metrics
 |90320  |Forest Hills        |Located at 299 Byberry Rd       |-75.0205556|40.1277778|
 |90321  |Somerton            |Located at 14021 Bustleton Ave  |-75.0119444|40.1305556|
 |90401  |Airport Terminal E F|Located at 8500 Essington Ave   |-75.2397222|39.8794444|
+*like any public project, I sacrificed creativity in order to finish at the last second*
