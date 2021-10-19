@@ -1,19 +1,21 @@
 # Assignment 02: PostGIS Analytics
-
 **Due: Oct 18, 2021 by 11:59pm ET**
+
+## by Alexander Nelms
+See the queries for more indepth discussions
 
 ## Questions
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
-|stop_name             |estimated_pop_800m|geometry                                      |
-|----------------------|-----------------:|--------------------------------------------------|
+|stop_name             |estimated_pop_800m|the_geom|
+|----------------------|-----------------:|---------|
 |Passyunk Av & 15th St |             50,867|*Point*|
 
 2. Which bus stop has the smallest population within 800 meters?
 
-|stop_name             |estimated_pop_800m|geometry                                      |
-|----------------------|-----------------:|--------------------------------------------------|
+|stop_name             |estimated_pop_800m|the_geom|
+|----------------------|-----------------:|---------|
 |Charter Rd & Norcom Rd|                 2|*Point*|
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
@@ -29,8 +31,8 @@
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
-|trip_headsign                 |trip_length       |
-|------------------------------|-----------------:|
+|trip_headsign                 |trip_length   |
+|------------------------------|------------:|
 |Bucks County Community College| 46,504|
 |Oxford Valley Mall            |43,658|
 
@@ -55,7 +57,7 @@ See this map of the bus stop metrics
 6. What are the _top five_ neighborhoods according to your accessibility metric?
 
 |accessibility_rank|neighborhood_name   |accessibility_metric|num_bus_stops_accessible|num_bus_stops_inaccessible|
-|:----------------:|--------------------|-------------------:|-----------------------:|-------------------------:|
+|:----------------:|--------------------|------------------:|--------------:|-------------------------:|
 |        1         |Washington Square West|               19.58|                      72|                         2|
 |        2         |Hawthorne           |               19.18|                      30|                         0|
 |        3         |Rittenhouse         |               18.54|                      99|                         4|

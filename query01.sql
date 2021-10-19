@@ -10,12 +10,13 @@ WITH septa_bus_stop_block_groups AS (
         s.stop_id,
         '1500000US' || bg.geoid10 AS geo_id
     FROM
-        septa_bus_stops AS s
-        JOIN census_block_groups AS bg ON ST_DWithin(
+        septa_bus_stops AS s, 
+        census_block_groups AS bg 
+    WITH ST_DWithin(
             st_transform(s.the_geom, 32129),
             st_transform(bg.the_geom, 32129),
             800
-        )
+        ) = 'true'
 ),
 septa_bus_stop_surrounding_population AS (
     SELECT
