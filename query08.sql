@@ -36,10 +36,16 @@ with upennProp as (
 	AND (address NOT LIKE '4114 SPRUCE%' AND address NOT LIKE '4431 SPRUCE%' 
 		 AND address NOT LIKE '4625 SPRUCE%' AND address NOT LIKE '127-29%'
 		)
+), upennGeneralizedCampus as (
+	select st_ConvexHull(st_union(up.the_geom)) as the_geom
+	from upennProp up
+), campusDividedBG as (
+	select bg.geoid10, st_intersection(bg.the_geom, upgc.the_geom) as the_geom
+	from census_block_groups bg, upennGeneralizedCampus upgc
 )
 
 select count(distinct(bg.the_geom)) as count_block_groups
 from census_block_groups bg
-join upennProp up
-on st_contains(bg.the_geom, up.the_geom)
+join campusDividedBG cdbg
+on st_contains(bg.the_geom, cdbg.the_geom)
 
