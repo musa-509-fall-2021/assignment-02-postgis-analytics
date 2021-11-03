@@ -22,6 +22,7 @@ create index if not exists septa_bus_stops__the_geom__32129__idx
 
 
 with septa_bus_stop_block_groups as (
+  /* make a new table combine stops and census block group, with distance smaller than 800  */
   select
      s.stop_id,
      '1500000US' || bg."GEOID10" as geo_id
@@ -33,7 +34,7 @@ with septa_bus_stop_block_groups as (
          800
      )
 ),
-
+  /* make a new table based on the table just created,sum the population as new column  */
 septa_bus_stop_surrounding_population as (
     select
         stop_id,
@@ -48,6 +49,6 @@ select
     estimated_pop_800m,
     the_geom
 from septa_bus_stop_surrounding_population
-join septa_bus_stops using (stop_id)
+join septa_bus_stops using (stop_id)   /* join in this part,helps add the_geom column to the final table */
 order by estimated_pop_800m asc
 limit 1

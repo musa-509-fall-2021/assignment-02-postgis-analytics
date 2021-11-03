@@ -46,7 +46,7 @@ ALTER TABLE septa_bus_shapes
 	ADD COLUMN the_geom geometry(Point, 4326);
 -- Make point with lon and lat,and set projection to 4326 --
 UPDATE septa_bus_shapes
-	SET the_geom = ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat), 4326);
+	SET the_geom = st_transform(ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat), 4326),32129);
 -- Check the dataset --
 select*
 	from septa_bus_shapes
@@ -149,3 +149,5 @@ copy census_population
 
 select *
     from census_population
+
+07.bus/trips.txt
