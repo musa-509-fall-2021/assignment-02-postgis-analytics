@@ -30,3 +30,5 @@ select count (*) as count_block_groups
   	from census_block_groups a
   	join whole_campus b
   	on st_contains(b.the_geom,ST_Transform(a.the_geom, 32129))
+
+	58

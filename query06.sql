@@ -1,11 +1,11 @@
-/*What are the top five neighborhoods according to your accessibility metric?*/
+/*What are the top five neighborhoods according to your accessibility metric?
 (
   neighborhood_name text,  -- The name of the neighborhood
   accessibility_metric ...,  -- Your accessibility metric value
   num_bus_stops_accessible integer,
   num_bus_stops_inaccessible integer
 )
-
+*/
 
 --add the_geom and match the coordinate system.
 alter table neighborhoods
