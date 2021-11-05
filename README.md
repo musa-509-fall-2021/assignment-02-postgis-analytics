@@ -24,6 +24,10 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+Answer：![01](https://user-images.githubusercontent.com/90070226/140439209-cda388ba-dd0b-40d0-abe7-4ffaea25c3be.jpg)
+
+
+
 2. Which bus stop has the smallest population within 800 meters?
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
@@ -35,6 +39,10 @@
       the_geom geometry(Point, 4326) -- The geometry of the bus stop
   )
   ```
+  
+  Answer：![02](https://user-images.githubusercontent.com/90070226/140439231-070d573a-e4c9-486d-ac01-ba71df5273cf.jpg)
+
+
 
 3. Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
@@ -46,6 +54,10 @@
       distance_m double precision  -- The distance apart in meters
   )
   ```
+  
+  Answer：![03](https://user-images.githubusercontent.com/90070226/140439255-a3966658-3934-4118-a42f-f1fb75a3a568.jpg)
+
+
 
 4. Using the _shapes.txt_ file from GTFS bus feed, find the **two** routes with the longest trips. In the final query, give the `trip_headsign` that corresponds to the `shape_id` of this route and the length of the trip.
 
@@ -56,14 +68,36 @@
       trip_length double precision  -- Length of the trip in meters
   )
   ```
+  
+  Answer：![04](https://user-images.githubusercontent.com/90070226/140439265-1e8da705-a3bb-4820-af82-c51521c0715c.jpg)
+
+
 
 5. Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. Describe your accessibility metric:
 
   **Description:**
+Answer: 
+From my opinion, I create a variable calculating the density of wheelchair
+ boarding in each neighborhood.
+ There are three steps.
+step1. group the stops by the neighborhood block,select all the bus stops contain in the neighborhood..
+step2. divide the bus stop into two type, the one with zero wheelchair boarding is classified inaccessible,
+      while the one with more than one wheelchair boarding, in this case one or two wheelchair bording is classified 
+      accessible.
+step3. divided the sum of wheelchair boarding by the area of each neighborhood, I can
+        get metric as the density of wheelchair boarding.
+step4. the higher the metric is, the better accessibility the neighborhood is.
+
 
 6. What are the _top five_ neighborhoods according to your accessibility metric?
+Answer:![06](https://user-images.githubusercontent.com/90070226/140439338-627ecb6c-5af9-4572-9afd-34e2f30e1653.jpg)
+
+
 
 7. What are the _bottom five_ neighborhoods according to your accessibility metric?
+Answer:![07](https://user-images.githubusercontent.com/90070226/140439351-b6afd303-8a51-47a5-a881-b80b921c3244.jpg)
+
+
 
   **Both #6 and #7 should have the structure:**
   ```sql
@@ -73,7 +107,9 @@
     num_bus_stops_accessible integer,
     num_bus_stops_inaccessible integer
   )
+
   ```
+
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
@@ -83,6 +119,9 @@
       count_block_groups integer
   )
   ```
+  
+Answer:	58
+
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. ST_MakePoint() and functions like that are not allowed.
 
@@ -92,6 +131,9 @@
       geo_id text
   )
   ```
+  
+  Answer:421010369001
+  
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. PostgreSQL's `CASE` statements may be helpful for some operations.
 
@@ -105,6 +147,9 @@
       stop_lat double precision
   )
   ```
+  
+Answer:![10](https://user-images.githubusercontent.com/90070226/140439409-dd8e42d9-f5ab-4364-ba14-39be2e4f5329.jpg)
+
 
   As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
 
