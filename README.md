@@ -24,6 +24,8 @@
 
 1. Which bus stop has the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
+Answer：
+
 2. Which bus stop has the smallest population within 800 meters?
 
   **The queries to #1 & #2 should generate relations with a single row, with the following structure:**
@@ -73,6 +75,8 @@
     num_bus_stops_accessible integer,
     num_bus_stops_inaccessible integer
   )
+
+
   ```
 
 8. With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
